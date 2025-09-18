@@ -1,0 +1,16 @@
+<!-- Thêm vào navigation -->
+<div class="navbar-nav ms-auto" th:if="${#authorization.expression('isAuthenticated()')}">
+    <span class="navbar-text text-light me-3">
+        Welcome, <strong th:text="${#authentication.name}">User</strong>!
+    </span>
+    <a class="nav-link" th:href="@{/dashboard}"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
+    <a class="nav-link" th:href="@{/products}"><i class="fas fa-box me-1"></i> Products</a>
+    <a class="nav-link" href="#"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
+    <a class="nav-link" th:href="@{/logout}"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+</div>
+
+<div class="navbar-nav ms-auto" th:unless="${#authorization.expression('isAuthenticated()')}">
+    <a class="nav-link" th:href="@{/}">Home</a>
+    <a class="nav-link" th:href="@{/products}">Products</a>
+    <a class="nav-link" th:href="@{/login}"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+</div>

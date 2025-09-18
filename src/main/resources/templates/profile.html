@@ -1,0 +1,56 @@
+<!-- src/main/resources/templates/profile.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Ecommerce</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-shopping-cart me-2"></i>Ecommerce
+        </a>
+        <div class="navbar-nav ms-auto">
+                <span class="navbar-text text-light me-3">
+                    Welcome, <strong th:text="${username}">User</strong>!
+                </span>
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+            <a class="nav-link" href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>User Profile</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="/images/user-avatar.png" class="rounded-circle mb-3"
+                         width="100" height="100" alt="User Avatar">
+                    <h4 th:text="${username}">Username</h4>
+                    <p class="text-muted">Member since 2024</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <p>This is your profile page. You can update your information here.</p>
+                    <a href="/dashboard" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
