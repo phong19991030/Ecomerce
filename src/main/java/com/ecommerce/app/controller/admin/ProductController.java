@@ -1,5 +1,5 @@
 // src/main/java/com/ecommerce/app/controller/ProductController.java
-package com.ecommerce.app.controller;
+package com.ecommerce.app.controller.admin;
 
 import com.ecommerce.app.dto.ProductDTO;
 import com.ecommerce.app.entity.Product;
@@ -47,17 +47,17 @@ public class ProductController {
 
             model.addAttribute("brands", brands);
             model.addAttribute("totalProducts", totalProducts);
-            model.addAttribute("currentPage", page);
-            model.addAttribute("pageSize", size);
-            model.addAttribute("sortBy", sortBy);
-            model.addAttribute("sortDirection", sortDirection);
-            model.addAttribute("keyword", keyword);
-            model.addAttribute("searchName", name);
-            model.addAttribute("searchDescription", description);
-            model.addAttribute("searchMinPrice", minPrice);
-            model.addAttribute("searchMaxPrice", maxPrice);
-            model.addAttribute("searchBrand", brand);
-            model.addAttribute("searchActive", active);
+//            model.addAttribute("currentPage", page);
+//            model.addAttribute("pageSize", size);
+//            model.addAttribute("sortBy", sortBy);
+//            model.addAttribute("sortDirection", sortDirection);
+//            model.addAttribute("keyword", keyword);
+//            model.addAttribute("searchName", name);
+//            model.addAttribute("searchDescription", description);
+//            model.addAttribute("searchMinPrice", minPrice);
+//            model.addAttribute("searchMaxPrice", maxPrice);
+//            model.addAttribute("searchBrand", brand);
+//            model.addAttribute("searchActive", active);
 
             return "admin/products";
 

@@ -22,4 +22,6 @@ public interface ProductService {
     long countProducts();
     long countProductsByCategory(Long categoryId);
     List<String> getAllBrands();
+    ProductDTO getProductDTOById(Long id);
+    Page<ProductDTO> getFeaturedProducts(int page, int size);
 }

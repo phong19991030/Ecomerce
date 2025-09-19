@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sản phẩm - Ecommerce Store</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/user-products.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <i class="fas fa-shopping-cart me-2"></i>Ecommerce Store
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/products">Sản phẩm</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">Về chúng tôi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Liên hệ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge bg-primary" id="cartCount">0</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/login">
+            <i class="fas fa-user me-1"></i> Đăng nhập
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="bg-primary text-white py-4 mb-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="display-5 fw-bold">Cửa hàng sản phẩm</h1>
+        <p class="lead">Khám phá các sản phẩm chất lượng cao với giá cả hợp lý</p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <div class="input-group">
+          <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm sản phẩm...">
+          <button class="btn btn-light" id="searchButton">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main content -->
+<main class="container mt-4">
+  <div class="row">
+    <!-- Filters Sidebar -->
+    <div class="col-md-3 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-filter me-2"></i>Bộ lọc</h5>
+        </div>
+        <div class="card-body">
+          <!-- Price Filter -->
+          <div class="mb-4">
+            <h6 class="text-primary">Khoảng giá</h6>
+            <div class="row">
+              <div class="col-6">
+                <input type="number" class="form-control form-control-sm" id="minPrice" placeholder="Từ" min="0">
+              </div>
+              <div class="col-6">
+                <input type="number" class="form-control form-control-sm" id="maxPrice" placeholder="Đến" min="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Brand Filter -->
+          <div class="mb-4">
+            <h6 class="text-primary">Thương hiệu</h6>
+            <div id="brandFilters">
+              <!-- Brands will be loaded by JS -->
+            </div>
+          </div>
+
+          <!-- Status Filter -->
+          <div class="mb-4">
+            <h6 class="text-primary">Trạng thái</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="inStockOnly" checked>
+              <label class="form-check-label" for="inStockOnly">
+                Chỉ hiện sản phẩm có sẵn
+              </label>
+            </div>
+          </div>
+
+          <button class="btn btn-primary w-100" id="applyFilters">
+            <i class="fas fa-check me-2"></i>Áp dụng
+          </button>
+          <button class="btn btn-outline-secondary w-100 mt-2" id="clearFilters">
+            <i class="fas fa-times me-2"></i>Xóa bộ lọc
+          </button>
+        </div>
+      </div>
+
+      <!-- Categories Sidebar -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h5><i class="fas fa-list me-2"></i>Danh mục</h5>
+        </div>
+        <div class="card-body">
+          <div id="categoryList">
+            <!-- Categories will be loaded by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="col-md-9">
+      <!-- Sort and View Options -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <span id="productCount" class="text-muted">Đang tải...</span>
+        </div>
+        <div class="d-flex gap-2">
+          <select class="form-select form-select-sm" id="sortBy">
+            <option value="name">Sắp xếp theo tên</option>
+            <option value="price">Giá tăng dần</option>
+            <option value="price,desc">Giá giảm dần</option>
+            <option value="createdDate,desc">Mới nhất</option>
+          </select>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary active" id="gridView">
+              <i class="fas fa-th"></i>
+            </button>
+            <button type="button" class="btn btn-outline-primary" id="listView">
+              <i class="fas fa-list"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="productsContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Products will be loaded by JS -->
+      </div>
+
+      <!-- Loading spinner -->
+      <div id="loadingSpinner" class="text-center my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Đang tải...</span>
+        </div>
+        <p class="mt-2">Đang tải sản phẩm...</p>
+      </div>
+
+      <!-- No products message -->
+      <div id="noProducts" class="text-center d-none my-5">
+        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+        <h4>Không tìm thấy sản phẩm nào</h4>
+        <p class="text-muted">Hãy thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm</p>
+        <button class="btn btn-primary" id="resetSearch">
+          <i class="fas fa-refresh me-2"></i>Đặt lại tìm kiếm
+        </button>
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Product pagination" class="mt-5">
+        <ul id="pagination" class="pagination justify-content-center">
+          <!-- Pagination will be rendered by JS -->
+        </ul>
+      </nav>
+    </div>
+  </div>
+</main>
+
+<!-- Product Quick View Modal -->
+<div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="quickViewTitle">Chi tiết sản phẩm</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <img id="quickViewImage" src="" class="img-fluid rounded" alt="Product Image">
+          </div>
+          <div class="col-md-6">
+            <h3 id="quickViewName"></h3>
+            <div class="mb-3">
+              <span class="h4 text-primary" id="quickViewPrice"></span>
+              <span class="text-muted" id="quickViewSku"></span>
+            </div>
+            <p id="quickViewDescription"></p>
+            <div class="mb-3">
+              <span class="fw-bold">Thương hiệu: </span>
+              <span id="quickViewBrand"></span>
+            </div>
+            <div class="mb-3">
+              <span class="fw-bold">Tình trạng: </span>
+              <span id="quickViewStock" class="badge bg-success"></span>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+              <a href="#" class="btn btn-primary flex-grow-1" id="quickViewDetailBtn">
+                <i class="fas fa-eye me-2"></i>Xem chi tiết
+              </a>
+              <button class="btn btn-outline-primary">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-5 mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <h5>Ecommerce Store</h5>
+        <p>Chúng tôi cung cấp các sản phẩm chất lượng cao với giá cả hợp lý.</p>
+      </div>
+      <div class="col-md-2 mb-4">
+        <h5>Liên kết</h5>
+        <ul class="list-unstyled">
+          <li><a href="/" class="text-white">Trang chủ</a></li>
+          <li><a href="/products" class="text-white">Sản phẩm</a></li>
+          <li><a href="/about" class="text-white">Về chúng tôi</a></li>
+          <li><a href="/contact" class="text-white">Liên hệ</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 mb-4">
+        <h5>Danh mục</h5>
+        <ul class="list-unstyled" id="footerCategories">
+          <!-- Categories will be loaded by JS -->
+        </ul>
+      </div>
+      <div class="col-md-3 mb-4">
+        <h5>Kết nối với chúng tôi</h5>
+        <div class="d-flex gap-3">
+          <a href="#" class="text-white"><i class="fab fa-facebook fa-2x"></i></a>
+          <a href="#" class="text-white"><i class="fab fa-twitter fa-2x"></i></a>
+          <a href="#" class="text-white"><i class="fab fa-instagram fa-2x"></i></a>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="text-center">
+      <p>&copy; 2024 Ecommerce Store. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="/js/toast-service.js"></script>
+<script src="/js/client/products-user.js"></script>
+</body>
+</html>

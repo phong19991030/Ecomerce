@@ -131,6 +131,16 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public ProductDTO getProductDTOById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Page<ProductDTO> getFeaturedProducts(int page, int size) {
+        return null;
+    }
+
     private ProductDTO convertToDTO(Product product) {
         ProductDTO dto = new ProductDTO();
         dto.setId(product.getId());
