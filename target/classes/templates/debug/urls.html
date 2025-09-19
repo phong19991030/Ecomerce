@@ -1,0 +1,71 @@
+<!-- src/main/resources/templates/debug/urls.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug URLs</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Ecommerce Debug</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4>URL Debug Information</h4>
+        </div>
+        <div class="card-body">
+            <h5>User Information</h5>
+            <p><strong>Username:</strong> <span th:text="${username}"></span></p>
+            <p><strong>Roles:</strong> <span th:text="${userRoles}"></span></p>
+
+            <hr>
+
+            <h5>All URLs in Database</h5>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Pattern</th>
+                    <th>HTTP Method</th>
+                    <th>Miêu tả</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="url : ${allUrls}">
+                    <td th:text="${url.id}"></td>
+                    <td th:text="${url.pattern}"></td>
+                    <td th:text="${url.httpMethod}"></td>
+                    <td th:text="${url.description}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <hr>
+
+            <h5>URLs with Roles</h5>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>URL Pattern</th>
+                    <th>HTTP Method</th>
+                    <th>Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${urlsWithRoles}">
+                    <td th:text="${item[0]}"></td>
+                    <td th:text="${item[1]}"></td>
+                    <td th:text="${item[2]}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

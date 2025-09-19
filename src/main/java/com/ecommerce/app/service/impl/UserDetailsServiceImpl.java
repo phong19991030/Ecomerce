@@ -1,4 +1,5 @@
-package com.ecommerce.app.service.impl;// src/main/java/com/ecommerce/app/service/UserDetailsServiceImpl.java
+// src/main/java/com/ecommerce/app/service/UserDetailsServiceImpl.java
+package com.ecommerce.app.service;
 
 import com.ecommerce.app.entity.User;
 import com.ecommerce.app.repository.UserRepository;
@@ -11,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +37,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
-        return Collections.singletonList(
-                new SimpleGrantedAuthority(user.getRole().name())
-        );
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName())) // KHÔNG thêm ROLE_ ở đây
+                .collect(Collectors.toList());
     }
 }

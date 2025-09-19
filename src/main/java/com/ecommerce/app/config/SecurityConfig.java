@@ -1,6 +1,7 @@
 // src/main/java/com/ecommerce/app/config/SecurityConfig.java
 package com.ecommerce.app.config;
 
+import com.ecommerce.app.security.CustomAuthorizationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,22 +21,24 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
+    private final CustomAuthorizationManager authorizationManager;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/user/**", "/dashboard", "/profile", "/orders").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/", "/public/**", "/products", "/css/**", "/js/**",
-                                "/webjars/**", "/images/**", "/login", "/error").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/login", "/logout", "/error", "/css/**", "/js/**",
+                                "/webjars/**", "/images/**", "/debug/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/error", "/error/**").permitAll()
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/products/**").permitAll()
+                        .anyRequest().access(authorizationManager)
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/dashboard", true) // Chuyển hướng đến dashboard
+                        .defaultSuccessUrl("/dashboard", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )

@@ -1,0 +1,63 @@
+<!-- src/main/resources/templates/debug/auth.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Auth Debug</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Auth Debug</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4>Authentication Debug Information</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>User Information</h5>
+                    <p><strong>Username:</strong> <span th:text="${username}"></span></p>
+                    <p><strong>Authenticated:</strong> <span th:text="${isAuthenticated}"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Authorities from Spring Security</h5>
+                    <ul>
+                        <li th:each="authority : ${authorities}" th:text="${authority}"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Role Names (processed)</h5>
+                    <ul>
+                        <li th:each="role : ${roleNames}" th:text="${role}"></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>Accessible URLs</h5>
+                    <ul>
+                        <li th:each="url : ${accessibleUrls}" th:text="${url}"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="text-center">
+                <a href="/dashboard" class="btn btn-primary">Try Dashboard</a>
+                <a href="/logout" class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
