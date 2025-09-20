@@ -1,0 +1,191 @@
+<!-- src/main/resources/templates/client/cart.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - Ecommerce Store</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/cart-client.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-shopping-cart me-2"></i>Ecommerce Store
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/client/products">
+                <i class="fas fa-box me-1"></i> Sản phẩm
+            </a>
+            <a class="nav-link active" href="/cart">
+                <i class="fas fa-shopping-cart me-1"></i> Giỏ hàng
+                <span class="badge bg-primary" th:text="${totalItems}">0</span>
+            </a>
+            <a class="nav-link" href="/dashboard">
+                <i class="fas fa-user me-1"></i> Tài khoản
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-shopping-cart me-2"></i>Giỏ hàng của bạn
+            </h1>
+
+            <!-- Error Message -->
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Empty Cart -->
+            <div th:unless="${cart?.items != null and !cart.items.empty}" class="text-center py-5">
+                <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
+                <h3 class="text-muted">Giỏ hàng trống</h3>
+                <p class="text-muted mb-4">Hãy thêm một số sản phẩm vào giỏ hàng của bạn</p>
+                <a href="/client/products" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag me-2"></i>Mua sắm ngay
+                </a>
+            </div>
+
+            <!-- Cart Items -->
+            <div th:if="${cart?.items != null and !cart.items.empty}" class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th style="width: 60%">Sản phẩm</th>
+                                <th style="width: 15%">Giá</th>
+                                <th style="width: 15%">Số lượng</th>
+                                <th style="width: 15%">Tổng</th>
+                                <th style="width: 5%"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="item : ${cart.items}">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img th:src="${item.product.imageUrl}"
+                                             th:alt="${item.product.name}"
+                                             class="cart-item-image me-3"
+                                             onerror="this.src='/images/placeholder-product.png'">
+                                        <div>
+                                            <h6 class="mb-1" th:text="${item.product.name}"></h6>
+                                            <small class="text-muted"
+                                                   th:text="${item.product.sku} ? 'SKU: ' + ${item.product.sku} : ''"></small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="h6 mb-0"
+                                          th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                                th:data-item-id="${item.id}"
+                                                onclick="updateQuantity(this, -1)">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input type="number" class="form-control text-center"
+                                               th:value="${item.quantity}"
+                                               min="1"
+                                               th:max="${item.product.stock}"
+                                               th:data-item-id="${item.id}"
+                                               onchange="updateQuantityInput(this)">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                                th:data-item-id="${item.id}"
+                                                onclick="updateQuantity(this, 1)">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <small class="text-muted" th:if="${item.quantity > item.product.stock}"
+                                           style="color: red !important;">
+                                        Chỉ còn <span th:text="${item.product.stock}"></span> sản phẩm
+                                    </small>
+                                </td>
+                                <td>
+                                        <span class="h6 text-primary"
+                                              th:text="${#numbers.formatDecimal(item.subtotal, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            th:data-item-id="${item.id}"
+                                            onclick="removeItem(this)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Cart Summary -->
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="d-flex gap-2">
+                                <a href="/client/products" class="btn btn-outline-primary">
+                                    <i class="fas fa-arrow-left me-2"></i>Tiếp tục mua sắm
+                                </a>
+                                <button class="btn btn-outline-danger" onclick="clearCart()">
+                                    <i class="fas fa-trash me-2"></i>Xóa giỏ hàng
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Tổng cộng</h5>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Tạm tính:</span>
+                                        <span th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span>Phí vận chuyển:</span>
+                                        <span class="text-success">Miễn phí</span>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <strong>Tổng tiền:</strong>
+                                        <strong class="text-primary"
+                                                th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT') + ' VND'}"></strong>
+                                    </div>
+                                    <a href="/checkout" class="btn btn-primary w-100">
+                                        <i class="fas fa-credit-card me-2"></i>Thanh toán
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+        <p>&copy; 2024 Ecommerce Store. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="/js/toast-service.js"></script>
+<script src="/js/client/cart-client.js"></script>
+
+</body>
+</html>

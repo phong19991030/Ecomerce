@@ -1,0 +1,85 @@
+/* src/main/resources/static/css/order.css */
+.order-status-badge {
+    font-size: 0.875rem;
+    padding: 0.35rem 0.65rem;
+}
+
+.order-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    transition: box-shadow 0.2s;
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.order-item {
+    border-bottom: 1px solid #f8f9fa;
+    padding: 1rem 0;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.order-summary {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.payment-method-card {
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.payment-method-card:hover {
+    border-color: #007bff;
+    background-color: #f8f9ff;
+}
+
+.payment-method-card.selected {
+    border-color: #007bff;
+    background-color: #e7f3ff;
+}
+
+.checkout-form .form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.checkout-form .form-control {
+    border-radius: 6px;
+}
+
+.checkout-form .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .order-item-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .order-summary {
+        padding: 1rem;
+    }
+
+    .table th, .table td {
+        padding: 0.5rem;
+    }
+}

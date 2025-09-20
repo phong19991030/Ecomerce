@@ -1,0 +1,109 @@
+<!-- src/main/resources/templates/admin/order-detail.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết đơn hàng - Admin</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/admin-order-detail.css">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <i class="fas fa-shopping-cart me-2"></i>Ecommerce Admin
+    </a>
+    <div class="navbar-nav ms-auto">
+            <span class="navbar-text text-light me-3">
+                <i class="fas fa-crown me-1"></i> Xin chào, Admin!
+            </span>
+      <a class="nav-link" href="/admin/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
+      <a class="nav-link active" href="/admin/orders"><i class="fas fa-shopping-bag me-1"></i> Đơn hàng</a>
+      <a class="nav-link" href="/admin/users"><i class="fas fa-users me-1"></i> Người dùng</a>
+      <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
+      <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container my-4">
+  <div class="row">
+    <div class="col-12">
+      <!-- Back Button -->
+      <div class="mb-4">
+        <a href="/admin/orders" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách đơn hàng
+        </a>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="loadingSpinner" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Đang tải chi tiết đơn hàng...</p>
+      </div>
+
+      <!-- Error Message -->
+      <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <span id="errorText"></span>
+      </div>
+
+      <!-- Order Not Found -->
+      <div id="orderNotFound" class="text-center py-5 d-none">
+        <i class="fas fa-exclamation-triangle fa-4x text-warning mb-4"></i>
+        <h3 class="text-warning">Không tìm thấy đơn hàng</h3>
+        <p class="text-muted mb-4">Đơn hàng bạn tìm kiếm không tồn tại</p>
+        <a href="/admin/orders" class="btn btn-primary">
+          <i class="fas fa-clipboard-list me-2"></i>Quay lại danh sách đơn hàng
+        </a>
+      </div>
+
+      <!-- Order Details -->
+      <div id="orderDetails" class="card d-none">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+  <div class="container text-center">
+    <p>&copy; 2024 Ecommerce App. Administrator Panel</p>
+  </div>
+</footer>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editOrderModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Chỉnh sửa đơn hàng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="editOrderModalBody">
+        <!-- Edit form will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="/js/toast-service.js"></script>
+<script src="/js/admin/admin-order-detail.js"></script>
+
+</body>
+</html>

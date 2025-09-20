@@ -1,0 +1,105 @@
+<!-- src/main/resources/templates/client/order-success.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt hàng thành công - Ecommerce Store</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/order.css">
+    <!-- Thêm vào thẻ head của checkout.html -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-shopping-cart me-2"></i>Ecommerce Store
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/client/products">
+                <i class="fas fa-box me-1"></i> Sản phẩm
+            </a>
+            <a class="nav-link" href="/cart">
+                <i class="fas fa-shopping-cart me-1"></i> Giỏ hàng
+            </a>
+            <a class="nav-link active" href="/orders">
+                <i class="fas fa-clipboard-list me-1"></i> Đơn hàng
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Success Message -->
+            <div class="card border-success">
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle fa-5x text-success"></i>
+                    </div>
+                    <h1 class="text-success mb-3">Đặt hàng thành công!</h1>
+                    <p class="lead mb-4">Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đã được tiếp nhận và đang được xử lý.</p>
+
+                    <div th:if="${order}" class="mb-4">
+                        <h4>Mã đơn hàng: <span class="text-primary" th:text="${order.orderNumber}"></span></h4>
+                        <p class="text-muted">Tổng tiền: <span class="h5 text-primary"
+                                                               th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span></p>
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a th:href="@{/orders/{orderNumber}(orderNumber=${order.orderNumber})}"
+                           class="btn btn-primary btn-lg">
+                            <i class="fas fa-eye me-2"></i>Xem chi tiết đơn hàng
+                        </a>
+                        <a href="/client/products" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div th:if="${order}" class="card mt-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-receipt me-2"></i>Thông tin đơn hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Thông tin giao hàng</h6>
+                            <p th:text="${order.customerName}"></p>
+                            <p th:text="${order.customerEmail}"></p>
+                            <p th:text="${order.customerPhone}"></p>
+                            <p th:text="${order.shippingAddress}"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Thông tin thanh toán</h6>
+                            <p>Phương thức: <span th:text="${order.paymentMethod}"></span></p>
+                            <p>Trạng thái: <span class="badge bg-success" th:text="${order.paymentStatus}"></span></p>
+                            <p>Ngày đặt: <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+        <p>&copy; 2024 Ecommerce Store. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

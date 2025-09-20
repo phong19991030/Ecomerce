@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -133,6 +134,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getProductDTOById(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return new ProductDTO(
+                    product.getId(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getStock(),
+                    product.getImageUrl(),
+                    product.getSku(),
+                    product.getBrand(),
+                    product.getColor(),
+                    product.getActive(),
+                    product.getCategory().getId(),
+                    product.getCategory().getName(),
+                    product.getCategory().getDescription()
+            );
+        }
         return null;
     }
 

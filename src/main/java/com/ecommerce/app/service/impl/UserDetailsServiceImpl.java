@@ -1,5 +1,4 @@
-// src/main/java/com/ecommerce/app/service/UserDetailsServiceImpl.java
-package com.ecommerce.app.service;
+package com.ecommerce.app.service.impl;// src/main/java/com/ecommerce/app/service/UserDetailsServiceImpl.java
 
 import com.ecommerce.app.entity.User;
 import com.ecommerce.app.repository.UserRepository;

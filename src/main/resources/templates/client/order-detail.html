@@ -1,0 +1,95 @@
+<!-- src/main/resources/templates/client/order-detail.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng - Ecommerce Store</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/order-detail.css">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-shopping-cart me-2"></i>Ecommerce Store
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/client/products">
+                <i class="fas fa-box me-1"></i> Sản phẩm
+            </a>
+            <a class="nav-link" href="/client/cart">
+                <i class="fas fa-shopping-cart me-1"></i> Giỏ hàng
+            </a>
+            <a class="nav-link active" href="/orders">
+                <i class="fas fa-clipboard-list me-1"></i> Đơn hàng
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <!-- Back Button -->
+            <div class="mb-4">
+                <a href="/orders" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách đơn hàng
+                </a>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Đang tải chi tiết đơn hàng...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <!-- Order Not Found -->
+            <div id="orderNotFound" class="text-center py-5 d-none">
+                <i class="fas fa-exclamation-triangle fa-4x text-warning mb-4"></i>
+                <h3 class="text-warning">Không tìm thấy đơn hàng</h3>
+                <p class="text-muted mb-4">Đơn hàng bạn tìm kiếm không tồn tại hoặc không có quyền truy cập</p>
+                <a href="/orders" class="btn btn-primary">
+                    <i class="fas fa-clipboard-list me-2"></i>Quay lại danh sách đơn hàng
+                </a>
+            </div>
+
+            <!-- Order Details -->
+            <div id="orderDetails" class="card d-none">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+        <p>&copy; 2024 Ecommerce Store. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="/js/toast-service.js"></script>
+<script src="/js/client/order-detail.js"></script>
+
+</body>
+</html>

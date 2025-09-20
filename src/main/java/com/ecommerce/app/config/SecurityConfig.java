@@ -10,10 +10,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +25,8 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final CustomAuthorizationManager authorizationManager;
+    private final CorsConfigurationSource corsConfigurationSource;
+    private final CorsConfig corsConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -31,8 +36,13 @@ public class SecurityConfig {
                                 "/webjars/**", "/images/**", "/debug/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/error", "/error/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/auth/status").permitAll()
+                        .requestMatchers("/admin/api/products/**").hasAuthority("ADMIN") // ADMIN API first
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // Admin pages
                         .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers("/api/cart/**").authenticated()
+                        .requestMatchers("/checkout").authenticated()
+                        .requestMatchers("/api/orders/**","/orders/**").authenticated()
                         .anyRequest().access(authorizationManager)
                 )
                 .formLogin(form -> form
@@ -49,8 +59,16 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-                .authenticationProvider(authenticationProvider())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
+                // THÊM CẤU HÌNH SESSION MANAGEMENT
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
+                // THÊM CẤU HÌNH COOKIE
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/public/**", "/api/cart/**", "/admin/api/products/**")
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                );
+        http.cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()));
 
         return http.build();
     }

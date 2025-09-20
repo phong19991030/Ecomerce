@@ -82,7 +82,7 @@ class ProductManager {
             // Sử dụng Ajax thay vì Fetch
             const self = this;
             $.ajax({
-                url: '/api/products',
+                url: '/admin/api/products',
                 type: 'GET',
                 data: params,
                 success: function (data) {
@@ -118,7 +118,7 @@ class ProductManager {
         try {
             // Sử dụng Ajax thay vì Fetch
             $.ajax({
-                url: '/api/products/brands',
+                url: '/admin/api/products/brands',
                 type: 'GET',
                 success: (brands) => {
                     this.renderBrandFilter(brands);
@@ -133,16 +133,11 @@ class ProductManager {
     }
 
     getCsrfToken() {
-        // Lấy CSRF token từ meta tag
         const token = $('meta[name="_csrf"]').attr('content');
         const header = $('meta[name="_csrf_header"]').attr('content');
-
-        if (!token) {
-            console.warn('CSRF token not found');
-            return '';
-        }
         return token;
     }
+
 
     handleSearch() {
         const formData = new FormData(document.getElementById('searchForm'));
@@ -188,7 +183,7 @@ class ProductManager {
                     modal.hide();
 
                     $.ajax({
-                        url: `/api/products/${id}`,
+                        url: `/admin/api/products/${id}`,
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': this.getCsrfToken()

@@ -1,29 +1,38 @@
 // src/main/java/com/ecommerce/app/entity/CartItem.java
 package com.ecommerce.app.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import jakarta.persistence.*;
-import lombok.Data;
-import java.math.BigDecimal;
 
-@Data
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "cart_items")
+@Getter
+@Setter
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    private Integer quantity;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    public BigDecimal getTotalPrice() {
-        return product.getPrice().multiply(BigDecimal.valueOf(quantity));
+    private int quantity;
+
+    @Column(name = "added_date")
+    private LocalDateTime addedDate;
+
+    @PrePersist
+    public void prePersist() {
+        if (addedDate == null) {
+            addedDate = LocalDateTime.now();
+        }
     }
 }

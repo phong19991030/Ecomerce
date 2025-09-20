@@ -38,7 +38,7 @@ $(document).ready(function() {
 
 function loadCategories() {
     $.ajax({
-        url: '/admin/api/categories/find_all',
+        url: '/api/public/categories/find_all',
         type: 'GET',
         success: function(categories) {
             const categorySelect = $('#categoryId');
@@ -58,7 +58,7 @@ function loadCategories() {
 
 function loadProductData(productId) {
     $.ajax({
-        url: `/api/products/${productId}`,
+        url: `/admin/api/products/${productId}`,
         type: 'GET',
         success: function(product) {
             // Fill form fields
@@ -125,11 +125,18 @@ function createProduct() {
     }
 
     $.ajax({
-        url: '/api/products',
+        url: '/admin/api/products',
         type: 'POST',
         data: formData,
         processData: false,
         contentType: false,
+        beforeSend: function(xhr) {
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+            if (token && header) {
+                xhr.setRequestHeader(header, token);
+            }
+        },
         success: function() {
             ToastService.success('Product created successfully!');
             setTimeout(() => {
@@ -168,11 +175,18 @@ function updateProduct(productId) {
     }
 
     $.ajax({
-        url: `/api/products/${productId}`,
+        url: `/admin/api/products/${productId}`,
         type: 'PUT',
         data: formData,
         processData: false,
         contentType: false,
+        beforeSend: function(xhr) {
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+            if (token && header) {
+                xhr.setRequestHeader(header, token);
+            }
+        },
         success: function() {
             ToastService.success('Product updated successfully!');
             setTimeout(() => {

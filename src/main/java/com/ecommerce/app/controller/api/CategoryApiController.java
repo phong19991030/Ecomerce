@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/admin/api/categories")
+@RequestMapping("/api/public/categories")
 @RequiredArgsConstructor
 public class CategoryApiController {
 

@@ -3,6 +3,7 @@ package com.ecommerce.app.controller.admin;
 
 import com.ecommerce.app.dto.ProductDTO;
 import com.ecommerce.app.entity.Product;
+import com.ecommerce.app.service.CategoryService;
 import com.ecommerce.app.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

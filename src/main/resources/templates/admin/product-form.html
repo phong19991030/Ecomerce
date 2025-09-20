@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/toast.css">
+    <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}"/>
+    <meta th:name="${_csrf.headerName}" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <div class="container mt-4">

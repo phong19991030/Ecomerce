@@ -5,7 +5,7 @@ class ToastService {
 
         const toastId = 'toast-' + Date.now();
         const toastHtml = `
-            <div id="${toastId}" class="toast align-items-center text-white bg-${type}" role="alert" aria-live="assertive" aria-atomic="true">
+            <div id="${toastId}" class="toast align-items-center text-bg-info bg-${type}" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
                         <i class="fas ${this.getIcon(type)} me-2"></i>${message}

@@ -1,0 +1,158 @@
+<!-- src/main/resources/templates/admin/orders.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đơn hàng - Admin</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin-orders.css">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-shopping-cart me-2"></i>Ecommerce Admin
+        </a>
+        <div class="navbar-nav ms-auto">
+            <span class="navbar-text text-light me-3">
+                <i class="fas fa-crown me-1"></i> Xin chào, Admin!
+            </span>
+            <a class="nav-link" href="/admin/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
+            <a class="nav-link active" href="/admin/orders"><i class="fas fa-shopping-bag me-1"></i> Đơn hàng</a>
+            <a class="nav-link" href="/admin/users"><i class="fas fa-users me-1"></i> Người dùng</a>
+            <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-shopping-bag me-2"></i>Quản lý đơn hàng</h1>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary" onclick="ordersManager.refreshOrders()">
+                        <i class="fas fa-sync-alt me-2"></i>Làm mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Trạng thái</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="">Tất cả</option>
+                                <option value="PENDING">PENDING</option>
+                                <option value="PROCESSING">PROCESSING</option>
+                                <option value="DELIVERED">DELIVERED</option>
+                                <option value="CANCELLED">CANCELLED</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Thanh toán</label>
+                            <select class="form-select" id="paymentStatusFilter">
+                                <option value="">Tất cả</option>
+                                <option value="PENDING">PENDING</option>
+                                <option value="PAID">PAID</option>
+                                <option value="FAILED">FAILED</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tìm kiếm</label>
+                            <input type="text" class="form-control" id="searchInput"
+                                   placeholder="Mã đơn hàng, tên khách hàng, email..."
+                                   onkeypress="if(event.keyCode===13) ordersManager.applyFilters()">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" onclick="ordersManager.applyFilters()">
+                                <i class="fas fa-filter me-2"></i>Lọc
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Đang tải danh sách đơn hàng...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <!-- Orders Table -->
+            <div id="ordersTable" class="card d-none">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Mã đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Số lượng</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Thanh toán</th>
+                                <th>Ngày đặt</th>
+                                <th>Thao tác</th>
+                            </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                            <!-- Orders will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center" id="pagination">
+                            <!-- Pagination will be populated by JavaScript -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Empty Orders -->
+            <div id="emptyOrders" class="text-center py-5 d-none">
+                <i class="fas fa-shopping-bag fa-4x text-muted mb-4"></i>
+                <h3 class="text-muted">Không có đơn hàng nào</h3>
+                <p class="text-muted">Chưa có đơn hàng nào được tạo</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+        <p>&copy; 2024 Ecommerce App. Administrator Panel</p>
+    </div>
+</footer>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="/js/toast-service.js"></script>
+<script src="/js/admin/admin-orders.js"></script>
+
+</body>
+</html>
