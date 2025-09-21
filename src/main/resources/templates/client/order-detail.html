@@ -1,4 +1,3 @@
-<!-- src/main/resources/templates/client/order-detail.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -14,29 +13,55 @@
 <body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <i class="fas fa-shopping-cart me-2"></i>Ecommerce Store
+            <i class="fas fa-shopping-cart me-2"></i>Ecommerce
         </a>
         <div class="navbar-nav ms-auto">
-            <a class="nav-link" href="/client/products">
-                <i class="fas fa-box me-1"></i> Sản phẩm
-            </a>
-            <a class="nav-link" href="/client/cart">
-                <i class="fas fa-shopping-cart me-1"></i> Giỏ hàng
-            </a>
-            <a class="nav-link active" href="/orders">
-                <i class="fas fa-clipboard-list me-1"></i> Đơn hàng
-            </a>
+            <span class="navbar-text text-light me-3">
+                Xin chào, <strong th:text="${username} ? ${username} : 'Khách'">User</strong>!
+            </span>
+            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Products</a>
+            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
+            <a class="nav-link active" href="/orders"><i class="fas fa-clipboard-list me-1"></i> Orders</a>
+            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Wishlist</a>
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
         </div>
     </div>
 </nav>
 
 <!-- Main Content -->
-<main class="container my-5">
+<main class="container mt-4">
     <div class="row">
-        <div class="col-12">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-user me-2"></i>My Account</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="/dashboard" class="list-group-item list-group-item-action">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    <a href="/profile" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user me-2"></i>Profile
+                    </a>
+                    <a href="/orders" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-shopping-bag me-2"></i>My Orders
+                    </a>
+                    <a href="/addresses" class="list-group-item list-group-item-action">
+                        <i class="fas fa-address-book me-2"></i>Addresses
+                    </a>
+                    <a href="/settings" class="list-group-item list-group-item-action">
+                        <i class="fas fa-cog me-2"></i>Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nội dung chính -->
+        <div class="col-md-9">
             <!-- Back Button -->
             <div class="mb-4">
                 <a href="/orders" class="btn btn-outline-secondary">
@@ -77,9 +102,9 @@
 </main>
 
 <!-- Footer -->
-<footer class="bg-dark text-white py-4 mt-5">
-    <div class="container text-center">
-        <p>&copy; 2024 Ecommerce Store. All rights reserved.</p>
+<footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+        <p>&copy; 2024 Ecommerce App. All rights reserved.</p>
     </div>
 </footer>
 

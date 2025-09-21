@@ -1,144 +1,193 @@
-// src/main/resources/static/js/cart.js
-class CartManager {
-    constructor() {
-        this.init();
-    }
-
-    init() {
-        this.setupEventListeners();
-    }
-
-    setupEventListeners() {
-        // Event listeners are handled by inline functions in the HTML
-    }
-
-    async updateQuantity(itemId, newQuantity) {
-        try {
-            const token = $("meta[name='_csrf']").attr("content");
-            const header = $("meta[name='_csrf_header']").attr("content");
-
-            const response = await fetch(`/api/cart/item/${itemId}?quantity=${newQuantity}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [header]: token
-                },
-                credentials: 'include'
-            });
-
-            if (response.ok) {
-                ToastService.success('Cập nhật giỏ hàng thành công');
-                // Reload the page to reflect changes
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                const error = await response.json();
-                ToastService.error('Lỗi: ' + (error.error || 'Không thể cập nhật'));
-            }
-        } catch (error) {
-            console.error('Error updating quantity:', error);
-            ToastService.error('Lỗi khi cập nhật giỏ hàng');
-        }
-    }
-
-    async removeItem(itemId) {
-        if (!confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
-            return;
-        }
-
-        try {
-            const token = $("meta[name='_csrf']").attr("content");
-            const header = $("meta[name='_csrf_header']").attr("content");
-
-            const response = await fetch(`/api/cart/item/${itemId}`, {
-                method: 'DELETE',
-                headers: {
-                    [header]: token
-                },
-                credentials: 'include'
-            });
-
-            if (response.ok) {
-                ToastService.success('Đã xóa sản phẩm khỏi giỏ hàng');
-                // Reload the page
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                const error = await response.json();
-                ToastService.error('Lỗi: ' + (error.error || 'Không thể xóa'));
-            }
-        } catch (error) {
-            console.error('Error removing item:', error);
-            ToastService.error('Lỗi khi xóa sản phẩm');
-        }
-    }
-
-    async clearCart() {
-        if (!confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')) {
-            return;
-        }
-
-        try {
-            const token = $("meta[name='_csrf']").attr("content");
-            const header = $("meta[name='_csrf_header']").attr("content");
-
-            const response = await fetch('/api/cart/clear', {
-                method: 'DELETE',
-                headers: {
-                    [header]: token
-                },
-                credentials: 'include'
-            });
-
-            if (response.ok) {
-                ToastService.success('Đã xóa toàn bộ giỏ hàng');
-                // Reload the page
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                const error = await response.json();
-                ToastService.error('Lỗi: ' + (error.error || 'Không thể xóa'));
-            }
-        } catch (error) {
-            console.error('Error clearing cart:', error);
-            ToastService.error('Lỗi khi xóa giỏ hàng');
-        }
+// Hiệu ứng loading khi thao tác với giỏ hàng
+function setButtonLoading(button, isLoading) {
+    if (isLoading) {
+        button.disabled = true;
+        button.classList.add('btn-loading');
+    } else {
+        button.disabled = false;
+        button.classList.remove('btn-loading');
     }
 }
 
-// Global functions for inline event handlers
+// Cập nhật số lượng sản phẩm
 function updateQuantity(button, change) {
-    const itemId = $(button).data('item-id');
-    const input = $(button).closest('.input-group').find('input');
-    let newQuantity = parseInt(input.val()) + change;
+    const itemId = button.getAttribute('data-item-id');
+    const input = document.querySelector(`input[data-item-id="${itemId}"]`);
+    let newQuantity = parseInt(input.value) + change;
 
-    // Ensure quantity is at least 1
-    newQuantity = Math.max(1, newQuantity);
+    if (newQuantity < 1) newQuantity = 1;
 
-    const cartManager = new CartManager();
-    cartManager.updateQuantity(itemId, newQuantity);
+    // Kiểm tra số lượng tồn kho
+    const maxStock = parseInt(input.getAttribute('max'));
+    if (newQuantity > maxStock) {
+        showToast('warning', 'Cảnh báo', `Chỉ còn ${maxStock} sản phẩm trong kho`);
+        newQuantity = maxStock;
+    }
+
+    input.value = newQuantity;
+    updateCartItem(itemId, newQuantity);
 }
 
+// Cập nhật số lượng từ input
 function updateQuantityInput(input) {
-    const itemId = $(input).data('item-id');
+    const itemId = input.getAttribute('data-item-id');
     let newQuantity = parseInt(input.value);
 
-    // Ensure quantity is at least 1
-    newQuantity = Math.max(1, newQuantity);
+    if (isNaN(newQuantity) || newQuantity < 1) {
+        newQuantity = 1;
+        input.value = 1;
+    }
 
-    const cartManager = new CartManager();
-    cartManager.updateQuantity(itemId, newQuantity);
+    // Kiểm tra số lượng tồn kho
+    const maxStock = parseInt(input.getAttribute('max'));
+    if (newQuantity > maxStock) {
+        showToast('warning', 'Cảnh báo', `Chỉ còn ${maxStock} sản phẩm trong kho`);
+        newQuantity = maxStock;
+        input.value = maxStock;
+    }
+
+    updateCartItem(itemId, newQuantity);
 }
 
+// Gửi yêu cầu cập nhật giỏ hàng
+function updateCartItem(itemId, quantity) {
+    setButtonLoading(event.target, true);
+
+    // Gửi yêu cầu AJAX đến server
+    fetch('/cart/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            itemId: itemId,
+            quantity: quantity
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Cập nhật giao diện
+                location.reload(); // Tải lại trang để cập nhật thông tin mới
+            } else {
+                showToast('error', 'Lỗi', data.message || 'Có lỗi xảy ra khi cập nhật giỏ hàng');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'Lỗi', 'Có lỗi xảy ra khi kết nối đến server');
+        })
+        .finally(() => {
+            setButtonLoading(event.target, false);
+        });
+}
+
+// Xóa sản phẩm khỏi giỏ hàng
 function removeItem(button) {
-    const itemId = $(button).data('item-id');
-    const cartManager = new CartManager();
-    cartManager.removeItem(itemId);
+    if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+        return;
+    }
+
+    const itemId = button.getAttribute('data-item-id');
+    setButtonLoading(button, true);
+
+    // Gửi yêu cầu AJAX đến server
+    fetch('/cart/remove', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            itemId: itemId
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', 'Thành công', 'Đã xóa sản phẩm khỏi giỏ hàng');
+                // Xóa hàng khỏi giao diện sau 0.5s
+                setTimeout(() => {
+                    location.reload(); // Tải lại trang để cập nhật thông tin mới
+                }, 500);
+            } else {
+                showToast('error', 'Lỗi', data.message || 'Có lỗi xảy ra khi xóa sản phẩm');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'Lỗi', 'Có lỗi xảy ra khi kết nối đến server');
+        })
+        .finally(() => {
+            setButtonLoading(button, false);
+        });
 }
 
+// Xóa toàn bộ giỏ hàng
 function clearCart() {
-    const cartManager = new CartManager();
-    cartManager.clearCart();
+    if (!confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?')) {
+        return;
+    }
+
+    // Gửi yêu cầu AJAX đến server
+    fetch('/cart/clear', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', 'Thành công', 'Đã xóa toàn bộ giỏ hàng');
+                // Tải lại trang sau 0.5s
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            } else {
+                showToast('error', 'Lỗi', data.message || 'Có lỗi xảy ra khi xóa giỏ hàng');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'Lỗi', 'Có lỗi xảy ra khi kết nối đến server');
+        });
 }
 
-// Initialize when document is ready
-$(document).ready(function() {
-    window.cartManager = new CartManager();
+// Hiển thị thông báo toast
+function showToast(type, title, message) {
+    // Sử dụng toast-service.js nếu có, hoặc tạo toast thủ công
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white bg-${type} border-0`;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+
+    toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong>${title}:</strong> ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        `;
+
+    document.getElementById('toastContainer').appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+
+    // Tự động xóa toast sau khi ẩn
+    toast.addEventListener('hidden.bs.toast', function() {
+        toast.remove();
+    });
+}
+
+// Khởi tạo tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    const tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 });

@@ -36,7 +36,7 @@
 
 .card {
     border: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .card .card-body {
@@ -86,4 +86,201 @@
     .card .card-body {
         padding: 1rem;
     }
+
+    :root {
+        --primary-color: #4e73df;
+        --secondary-color: #6f42c1;
+        --success-color: #1cc88a;
+        --danger-color: #e74a3b;
+        --warning-color: #f6c23e;
+        --light-bg: #f8f9fc;
+    }
+
+    body {
+        background-color: var(--light-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        color: var(--primary-color) !important;
+    }
+
+    .nav-link {
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .nav-link:hover {
+        color: var(--primary-color) !important;
+        transform: translateY(-2px);
+    }
+
+    .cart-item-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .cart-summary-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        background: linear-gradient(to bottom right, #ffffff, #f8f9fc);
+    }
+
+    .cart-table {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .cart-table thead th {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 600;
+        padding: 16px;
+    }
+
+    .cart-table tbody td {
+        padding: 16px;
+        vertical-align: middle;
+    }
+
+    .quantity-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+    }
+
+    .quantity-input {
+        height: 32px;
+        text-align: center;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+    }
+
+    .btn-checkout {
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-checkout:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(78, 115, 223, 0.4);
+    }
+
+    .empty-cart-icon {
+        font-size: 5rem;
+        color: #ddd;
+        margin-bottom: 1.5rem;
+    }
+
+    .stock-warning {
+        font-size: 0.8rem;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .product-name {
+        font-weight: 600;
+        color: #333;
+        transition: color 0.2s;
+    }
+
+    .product-name:hover {
+        color: var(--primary-color);
+    }
+
+    .continue-shopping {
+        transition: all 0.3s;
+    }
+
+    .continue-shopping:hover {
+        transform: translateX(-5px);
+    }
+
+    .footer {
+        margin-top: 100px;
+    }
+
+    /* Animation for cart actions */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .cart-item-row {
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+        }
+
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .d-flex.gap-2 {
+            flex-direction: column;
+        }
+
+        .d-flex.gap-2 .btn {
+            margin-bottom: 10px;
+        }
+    }
+
+    /* Loading spinner for buttons */
+    .spinner-border-sm {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .btn-loading {
+        position: relative;
+        color: transparent !important;
+    }
+
+    .btn-loading::after {
+        content: '';
+        position: absolute;
+        width: 1rem;
+        height: 1rem;
+        top: 50%;
+        left: 50%;
+        margin-left: -0.5rem;
+        margin-top: -0.5rem;
+        border: 2px solid transparent;
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
 }
