@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,11 @@ public class RoleServiceImpl implements RoleService {
     public Role getRoleById(Long id) {
         return roleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
+    }
+
+    @Override
+    public Optional<Role> findRoleById(Long id) {
+        return roleRepository.findById(id);
     }
 
     @Override
@@ -65,5 +71,15 @@ public class RoleServiceImpl implements RoleService {
 
         role.setUrls(urls);
         roleRepository.save(role);
+    }
+
+    @Override
+    public Role saveRole(Role role) {
+        return roleRepository.save(role);
+    }
+
+    @Override
+    public boolean roleExists(String name) {
+        return roleRepository.existsByName(name);
     }
 }

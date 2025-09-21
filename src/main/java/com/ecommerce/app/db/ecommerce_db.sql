@@ -14,12 +14,10 @@
 
 
 -- Dumping database structure for ecommerce_db
-DROP DATABASE IF EXISTS `ecommerce_db`;
 CREATE DATABASE IF NOT EXISTS `ecommerce_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 USE `ecommerce_db`;
 
 -- Dumping structure for table ecommerce_db.carts
-DROP TABLE IF EXISTS `carts`;
 CREATE TABLE IF NOT EXISTS `carts` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) DEFAULT NULL,
@@ -30,14 +28,13 @@ CREATE TABLE IF NOT EXISTS `carts` (
   CONSTRAINT `FKb5o626f86h46m4s7ms6ginnop` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.carts: ~1 rows (approximately)
+-- Dumping data for table ecommerce_db.carts: ~0 rows (approximately)
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
 INSERT IGNORE INTO `carts` (`id`, `user_id`, `created_date`, `updated_date`) VALUES
 	(1, 4, '2025-09-20 08:56:09.000000', '2025-09-20 08:56:09.000000');
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.cart_items
-DROP TABLE IF EXISTS `cart_items`;
 CREATE TABLE IF NOT EXISTS `cart_items` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `quantity` int(11) DEFAULT NULL,
@@ -56,7 +53,6 @@ CREATE TABLE IF NOT EXISTS `cart_items` (
 /*!40000 ALTER TABLE `cart_items` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.categories
-DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -73,7 +69,6 @@ INSERT IGNORE INTO `categories` (`id`, `description`, `name`) VALUES
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.orders
-DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `customer_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -103,7 +98,6 @@ INSERT IGNORE INTO `orders` (`id`, `customer_email`, `customer_name`, `customer_
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.order_items
-DROP TABLE IF EXISTS `order_items`;
 CREATE TABLE IF NOT EXISTS `order_items` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `quantity` int(11) NOT NULL,
@@ -118,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   CONSTRAINT `FKocimc7dtr037rh4ls4l95nlfi` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.order_items: ~4 rows (approximately)
+-- Dumping data for table ecommerce_db.order_items: ~3 rows (approximately)
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
 INSERT IGNORE INTO `order_items` (`id`, `quantity`, `subtotal`, `unit_price`, `order_id`, `product_id`) VALUES
 	(1, 2, 50000.00, 25000.00, 1, 6),
@@ -128,7 +122,6 @@ INSERT IGNORE INTO `order_items` (`id`, `quantity`, `subtotal`, `unit_price`, `o
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.products
-DROP TABLE IF EXISTS `products`;
 CREATE TABLE IF NOT EXISTS `products` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -172,7 +165,6 @@ INSERT IGNORE INTO `products` (`id`, `description`, `image_url`, `name`, `price`
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.roles
-DROP TABLE IF EXISTS `roles`;
 CREATE TABLE IF NOT EXISTS `roles` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -189,7 +181,6 @@ INSERT IGNORE INTO `roles` (`id`, `description`, `name`) VALUES
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.role_url
-DROP TABLE IF EXISTS `role_url`;
 CREATE TABLE IF NOT EXISTS `role_url` (
   `role_id` bigint(20) NOT NULL,
   `url_id` bigint(20) NOT NULL,
@@ -199,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `role_url` (
   CONSTRAINT `FK5c2fwqwq32gj1wywe6j48plnv` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.role_url: ~33 rows (approximately)
+-- Dumping data for table ecommerce_db.role_url: ~31 rows (approximately)
 /*!40000 ALTER TABLE `role_url` DISABLE KEYS */;
 INSERT IGNORE INTO `role_url` (`role_id`, `url_id`) VALUES
 	(3, 14),
@@ -238,7 +229,6 @@ INSERT IGNORE INTO `role_url` (`role_id`, `url_id`) VALUES
 /*!40000 ALTER TABLE `role_url` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.urls
-DROP TABLE IF EXISTS `urls`;
 CREATE TABLE IF NOT EXISTS `urls` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -247,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `urls` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.urls: ~24 rows (approximately)
+-- Dumping data for table ecommerce_db.urls: ~22 rows (approximately)
 /*!40000 ALTER TABLE `urls` DISABLE KEYS */;
 INSERT IGNORE INTO `urls` (`id`, `description`, `http_method`, `pattern`) VALUES
 	(14, 'Login page', 'GET', '/login'),
@@ -277,7 +267,6 @@ INSERT IGNORE INTO `urls` (`id`, `description`, `http_method`, `pattern`) VALUES
 /*!40000 ALTER TABLE `urls` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.users
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -289,17 +278,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`),
   UNIQUE KEY `UKr43af9ap4edm43mmtq01oddj6` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.users: ~2 rows (approximately)
+-- Dumping data for table ecommerce_db.users: ~3 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT IGNORE INTO `users` (`id`, `email`, `enabled`, `full_name`, `password`, `role`, `username`) VALUES
 	(3, 'admin@email.com', b'1', 'Administrator', '$2a$10$kN14YPnGXQlgR1oIYhOhlO1/RlvYbfnN2j2D/E76.mIleKVhsweyS', NULL, 'admin'),
-	(4, 'user@email.com', b'1', 'Regular User', '$2a$10$w6JSDLmqg1QbazTv9cLJuuweBNBFuvIlQ0v4AuNb9hyZn4hfyMW1y', NULL, 'user');
+	(4, 'user@email.com', b'1', 'Regular User', '$2a$10$w6JSDLmqg1QbazTv9cLJuuweBNBFuvIlQ0v4AuNb9hyZn4hfyMW1y', NULL, 'user'),
+	(8, 'phongnguyen1999.10.30@gmail.com', b'1', 'Nguyễn Chung Phong', '$2a$10$/vPabnBs4Pe.3pjrZjEc1.09JEe2R87SImzFF3tp708aZoIEsWWB.', NULL, 'phongnc');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.user_role
-DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE IF NOT EXISTS `user_role` (
   `user_id` bigint(20) NOT NULL,
   `role_id` bigint(20) NOT NULL,
@@ -309,11 +298,12 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKt7e7djp752sqn6w22i6ocqy6q` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.user_role: ~2 rows (approximately)
+-- Dumping data for table ecommerce_db.user_role: ~3 rows (approximately)
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
 INSERT IGNORE INTO `user_role` (`user_id`, `role_id`) VALUES
 	(3, 3),
-	(4, 4);
+	(4, 4),
+	(8, 3);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
