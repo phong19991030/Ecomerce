@@ -1,0 +1,240 @@
+<!-- src/main/resources/templates/profile/profile.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Ecommerce</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        .profile-card, .address-card {
+            transition: transform 0.2s;
+        }
+        .profile-card:hover, .address-card:hover {
+            transform: translateY(-2px);
+        }
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation (same as dashboard) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/static">
+            <i class="fas fa-shopping-cart me-2"></i>Ecommerce
+        </a>
+        <div class="navbar-nav ms-auto">
+            <span class="navbar-text text-light me-3">
+                Xin chào, <strong th:text="${username}">User</strong>!
+            </span>
+            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Products</a>
+            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
+            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Wishlist</a>
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- User Sidebar -->
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-user me-2"></i>My Account</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="/dashboard" class="list-group-item list-group-item-action">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    <a href="/profile" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-user me-2"></i>Profile
+                    </a>
+                    <a href="/orders" class="list-group-item list-group-item-action">
+                        <i class="fas fa-shopping-bag me-2"></i>My Orders
+                    </a>
+                    <a href="/addresses" class="list-group-item list-group-item-action">
+                        <i class="fas fa-address-book me-2"></i>Addresses
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <!-- Profile Content -->
+            <div class="card profile-card">
+                <div class="card-header">
+                    <h4><i class="fas fa-user me-2"></i>My Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form id="profileForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username"
+                                           th:value="${profile.username}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email"
+                                           th:value="${profile.email}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName"
+                                   th:value="${profile.fullName}" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Profile
+                        </button>
+                    </form>
+
+                    <hr>
+
+                    <h5 class="mt-4">Change Password</h5>
+                    <form id="passwordForm">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="currentPassword" class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="currentPassword" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="newPassword" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-key me-2"></i>Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+        <p>&copy; 2024 Ecommerce App. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Lấy CSRF token từ meta tag
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+
+        // Profile form submission
+        $('#profileForm').on('submit', async function(e) {
+            e.preventDefault();
+
+            const profileData = {
+                email: $('#email').val(),
+                fullName: $('#fullName').val()
+            };
+
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [header]: token
+                    },
+                    body: JSON.stringify(profileData),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    showAlert('Profile updated successfully!', 'success');
+                } else {
+                    showAlert('Error updating profile. Status: ' + response.status, 'danger');
+                }
+            } catch (error) {
+                showAlert('Error updating profile: ' + error.message, 'danger');
+            }
+        });
+
+        // Password form submission
+        $('#passwordForm').on('submit', async function(e) {
+            e.preventDefault();
+
+            const currentPassword = $('#currentPassword').val();
+            const newPassword = $('#newPassword').val();
+            const confirmPassword = $('#confirmPassword').val();
+
+            if (newPassword !== confirmPassword) {
+                showAlert('New passwords do not match!', 'danger');
+                return;
+            }
+
+            const passwordData = {
+                currentPassword: currentPassword,
+                newPassword: newPassword
+            };
+
+            try {
+                const response = await fetch('/api/profile/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [header]: token
+                    },
+                    body: JSON.stringify(passwordData),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        showAlert('Password changed successfully!', 'success');
+                        $('#passwordForm')[0].reset();
+                    } else {
+                        showAlert(result.message, 'danger');
+                    }
+                } else {
+                    showAlert('Error changing password. Status: ' + response.status, 'danger');
+                }
+            } catch (error) {
+                showAlert('Error changing password: ' + error.message, 'danger');
+            }
+        });
+
+        function showAlert(message, type) {
+            const alert = $('<div class="alert alert-' + type + ' alert-dismissible fade show mt-3">' +
+                message +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+                '</div>');
+            $('.card-body').prepend(alert);
+            setTimeout(() => alert.alert('close'), 5000);
+        }
+    });
+</script>
+</body>
+</html>

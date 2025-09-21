@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/api/products/**").hasAuthority("ADMIN") // ADMIN API first
                         .requestMatchers("/admin/**").hasAuthority("ADMIN") // Admin pages
                         .requestMatchers("/api/products/**").permitAll()
-                        .requestMatchers("/api/cart/**").authenticated()
+                        .requestMatchers("/api/cart/**","api/profile/**","api/addresses/**").authenticated()
                         .requestMatchers("/checkout").authenticated()
                         .requestMatchers("/api/orders/**","/orders/**").authenticated()
                         .anyRequest().access(authorizationManager)
