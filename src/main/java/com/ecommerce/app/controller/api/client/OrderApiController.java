@@ -139,4 +139,36 @@ public class OrderApiController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
+    @GetMapping("/success/{orderNumber}")
+    public ResponseEntity<?> getOrderSuccess(@PathVariable String orderNumber) {
+        try {
+            Long userId = getUserIdFromAuthentication();
+            OrderDTO order = orderService.getOrderByNumber(orderNumber);
+
+            // Verify order belongs to user
+            if (!order.getUserId().equals(userId)) {
+                Map<String, Object> error = new HashMap<>();
+                error.put("success", false);
+                error.put("error", "Access denied");
+                return ResponseEntity.status(403).body(error);
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("order", order);
+
+            return ResponseEntity.ok(response);
+        } catch (SecurityException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("error", "Authentication required");
+            return ResponseEntity.status(401).body(error);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("error", "Order not found: " + e.getMessage());
+            return ResponseEntity.status(404).body(error);
+        }
+    }
 }

@@ -76,11 +76,11 @@ class CheckoutManager {
                         xhr.setRequestHeader(header, token);
                     }
                 },
-                success: (order) => {
+                success: (response) => {
                     ToastService.success('Đặt hàng thành công!');
                     // Redirect to success page
                     setTimeout(() => {
-                        window.location.href = `/orders/success/${order.orderNumber}`;
+                        window.location.href = `/orders/success/${response.orderNumber}`;
                     }, 1500);
                 },
                 error: (xhr, status, error) => {

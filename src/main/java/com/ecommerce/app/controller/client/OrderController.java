@@ -25,7 +25,8 @@ public class OrderController {
     }
 
     @GetMapping("/success/{orderNumber}")
-    public String orderSuccess(@PathVariable String orderNumber) {
+    public String orderSuccess(@PathVariable String orderNumber, Model model) {
+        model.addAttribute("orderNumber", orderNumber);
         return "client/order-success";
     }
 }
