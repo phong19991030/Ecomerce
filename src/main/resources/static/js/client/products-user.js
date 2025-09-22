@@ -136,7 +136,7 @@ class UserProductManager {
         try {
             // SỬA THÀNH AJAX
             $.ajax({
-                url: '/admin/api/products/brands',
+                url: '/api/public/products/brands',
                 type: 'GET',
                 success: (brands) => {
                     this.renderBrandFilters(brands);
@@ -638,6 +638,7 @@ async function addToCart(productId, quantity = 1) {
         }
     }
 }
+
 async function isUserLoggedIn() {
     try {
         const response = await fetch('/api/auth/status', {
@@ -663,10 +664,10 @@ function isUserLoggedInSync() {
         url: '/api/auth/status',
         type: 'GET',
         async: false, // Làm request đồng bộ
-        success: function(data) {
+        success: function (data) {
             isLoggedIn = data.authenticated === true;
         },
-        error: function() {
+        error: function () {
             isLoggedIn = false;
         }
     });
@@ -684,7 +685,7 @@ function updateCartCount() {
     $.ajax({
         url: '/api/cart/count',
         type: 'GET',
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             const token = $("meta[name='_csrf']").attr("content");
             const header = $("meta[name='_csrf_header']").attr("content");
             if (token && header) {
@@ -704,6 +705,7 @@ function updateCartCount() {
         }
     });
 }
+
 $(document).ready(function () {
     // Add custom CSS for list view
     $('head').append(`

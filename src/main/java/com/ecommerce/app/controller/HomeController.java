@@ -9,6 +9,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
+//    @GetMapping("")
+//    public String homes() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//
+//        // Kiểm tra nếu user đã đăng nhập thì chuyển đến dashboard
+//        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+//            return "redirect:/dashboard";
+//        }
+//
+//        // Nếu chưa đăng nhập thì chuyển đến trang login
+//        return "redirect:/login";
+//    }
 
     @GetMapping("/")
     public String home() {

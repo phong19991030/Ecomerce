@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -67,6 +68,18 @@ public class ProductUserApiController {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Product not found: " + e.getMessage());
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/brands")
+    public ResponseEntity<?> getAllBrands() {
+        try {
+            List<String> brands = productService.getAllBrands();
+            return ResponseEntity.ok(brands);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Failed to fetch brands: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(error);
         }
     }
 

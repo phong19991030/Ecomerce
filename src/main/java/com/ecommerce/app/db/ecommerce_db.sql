@@ -17,6 +17,32 @@
 CREATE DATABASE IF NOT EXISTS `ecommerce_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 USE `ecommerce_db`;
 
+-- Dumping structure for table ecommerce_db.addresses
+CREATE TABLE IF NOT EXISTS `addresses` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `address_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `full_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_default` bit(1) NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `street` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `zip_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK1fa36y2oqhao3wgg2rw1pi459` (`user_id`),
+  CONSTRAINT `FK1fa36y2oqhao3wgg2rw1pi459` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table ecommerce_db.addresses: ~3 rows (approximately)
+/*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
+INSERT IGNORE INTO `addresses` (`id`, `address_type`, `city`, `country`, `full_name`, `is_default`, `phone`, `state`, `street`, `zip_code`, `user_id`) VALUES
+	(2, 'HOME', ' Hà Nội', 'Việt Nam', 'Nguyễn Chung Phong', b'1', '0354412060', '69', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', '2000', 4),
+	(3, 'WORK', 'Hà Nội', 'Việt Nam', 'Nguyễn Chung Phong', b'0', '0354412060', '69', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', '2000', 4),
+	(4, 'OTHER', 'Hà Nội', 'Việt Nam', 'Nguyễn Chung Phong', b'0', '0354412060', '69', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', '2000', 4);
+/*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
+
 -- Dumping structure for table ecommerce_db.carts
 CREATE TABLE IF NOT EXISTS `carts` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -28,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `carts` (
   CONSTRAINT `FKb5o626f86h46m4s7ms6ginnop` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.carts: ~0 rows (approximately)
+-- Dumping data for table ecommerce_db.carts: ~1 rows (approximately)
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
 INSERT IGNORE INTO `carts` (`id`, `user_id`, `created_date`, `updated_date`) VALUES
 	(1, 4, '2025-09-20 08:56:09.000000', '2025-09-20 08:56:09.000000');
@@ -46,9 +72,9 @@ CREATE TABLE IF NOT EXISTS `cart_items` (
   KEY `FK1re40cjegsfvw58xrkdp6bac6` (`product_id`),
   CONSTRAINT `FK1re40cjegsfvw58xrkdp6bac6` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
   CONSTRAINT `FKpcttvuq4mxppo8sxggjtn5i2c` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.cart_items: ~0 rows (approximately)
+-- Dumping data for table ecommerce_db.cart_items: ~2 rows (approximately)
 /*!40000 ALTER TABLE `cart_items` DISABLE KEYS */;
 /*!40000 ALTER TABLE `cart_items` ENABLE KEYS */;
 
@@ -88,13 +114,21 @@ CREATE TABLE IF NOT EXISTS `orders` (
   UNIQUE KEY `UKnthkiu7pgmnqnu86i2jyoe2v7` (`order_number`),
   KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
   CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.orders: ~2 rows (approximately)
+-- Dumping data for table ecommerce_db.orders: ~9 rows (approximately)
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
 INSERT IGNORE INTO `orders` (`id`, `customer_email`, `customer_name`, `customer_phone`, `order_date`, `order_number`, `payment_method`, `payment_status`, `shipping_address`, `status`, `total_amount`, `updated_date`, `user_id`, `notes`) VALUES
 	(1, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-20 10:43:24.000000', 'ORD-1758365004806-542', 'COD', 'PAID', 'Thanh Trì', 'DELIVERED', 140000.00, '2025-09-20 14:38:42.000000', 4, 'Đang giao hàng đến >>\n'),
-	(2, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-20 10:47:04.000000', 'ORD-1758365224809-247', 'COD', 'PENDING', 'Hà Nội', 'PROCESSING', 25000.00, '2025-09-20 14:18:59.000000', 4, NULL);
+	(2, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-20 10:47:04.000000', 'ORD-1758365224809-247', 'COD', 'PENDING', 'Hà Nội', 'PROCESSING', 25000.00, '2025-09-20 14:18:59.000000', 4, NULL),
+	(3, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 04:40:43.000000', 'ORD-1758429643624-848', 'COD', 'PENDING', '48', 'PENDING', 55000.00, '2025-09-21 04:40:43.000000', 4, NULL),
+	(4, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 06:29:09.000000', 'ORD-1758436149911-194', 'BANK_TRANSFER', 'PENDING', '123123', 'PENDING', 30000.00, '2025-09-21 06:29:09.000000', 4, NULL),
+	(5, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 06:31:43.000000', 'ORD-1758436303547-558', 'BANK_TRANSFER', 'PENDING', '48', 'PENDING', 85000.00, '2025-09-21 06:31:43.000000', 4, NULL),
+	(6, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 07:04:33.000000', 'ORD-1758438273746-693', 'COD', 'PENDING', 'dq2321', 'PENDING', 85000.00, '2025-09-21 07:04:33.000000', 4, NULL),
+	(7, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 07:09:54.000000', 'ORD-1758438594643-428', 'COD', 'PENDING', 'e12qwq', 'PENDING', 25000.00, '2025-09-21 07:09:54.000000', 4, NULL),
+	(8, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 07:11:46.000000', 'ORD-1758438706966-933', 'COD', 'PENDING', '123123', 'PENDING', 85000.00, '2025-09-21 07:11:46.000000', 4, NULL),
+	(9, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 09:10:39.000000', 'ORD-1758445839468-529', 'COD', 'PENDING', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', 'PENDING', 25000.00, '2025-09-21 09:10:39.000000', 4, NULL),
+	(10, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-22 16:01:44.000000', 'ORD-1758556904934-186', 'COD', 'PENDING', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', 'PENDING', 105000.00, '2025-09-22 16:01:44.000000', 4, NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.order_items
@@ -110,15 +144,31 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   KEY `FKocimc7dtr037rh4ls4l95nlfi` (`product_id`),
   CONSTRAINT `FKbioxgbv59vetrxe0ejfubep1w` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `FKocimc7dtr037rh4ls4l95nlfi` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.order_items: ~3 rows (approximately)
+-- Dumping data for table ecommerce_db.order_items: ~18 rows (approximately)
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
 INSERT IGNORE INTO `order_items` (`id`, `quantity`, `subtotal`, `unit_price`, `order_id`, `product_id`) VALUES
 	(1, 2, 50000.00, 25000.00, 1, 6),
 	(2, 2, 60000.00, 30000.00, 1, 7),
 	(3, 1, 30000.00, 30000.00, 1, 8),
-	(4, 1, 25000.00, 25000.00, 2, 6);
+	(4, 1, 25000.00, 25000.00, 2, 6),
+	(5, 1, 25000.00, 25000.00, 3, 6),
+	(6, 1, 30000.00, 30000.00, 3, 7),
+	(7, 1, 30000.00, 30000.00, 4, 7),
+	(8, 1, 25000.00, 25000.00, 5, 6),
+	(9, 1, 30000.00, 30000.00, 5, 7),
+	(10, 1, 30000.00, 30000.00, 5, 8),
+	(11, 1, 25000.00, 25000.00, 6, 6),
+	(12, 1, 30000.00, 30000.00, 6, 7),
+	(13, 1, 30000.00, 30000.00, 6, 8),
+	(14, 1, 25000.00, 25000.00, 7, 6),
+	(15, 1, 25000.00, 25000.00, 8, 6),
+	(16, 1, 30000.00, 30000.00, 8, 7),
+	(17, 1, 30000.00, 30000.00, 8, 8),
+	(18, 1, 25000.00, 25000.00, 9, 6),
+	(19, 1, 30000.00, 30000.00, 10, 13),
+	(20, 3, 75000.00, 25000.00, 10, 6);
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.products
@@ -190,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `role_url` (
   CONSTRAINT `FK5c2fwqwq32gj1wywe6j48plnv` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.role_url: ~31 rows (approximately)
+-- Dumping data for table ecommerce_db.role_url: ~43 rows (approximately)
 /*!40000 ALTER TABLE `role_url` DISABLE KEYS */;
 INSERT IGNORE INTO `role_url` (`role_id`, `url_id`) VALUES
 	(3, 14),
@@ -214,6 +264,11 @@ INSERT IGNORE INTO `role_url` (`role_id`, `url_id`) VALUES
 	(3, 35),
 	(3, 36),
 	(3, 37),
+	(3, 38),
+	(3, 39),
+	(3, 40),
+	(3, 41),
+	(3, 42),
 	(4, 14),
 	(4, 15),
 	(4, 16),
@@ -225,7 +280,12 @@ INSERT IGNORE INTO `role_url` (`role_id`, `url_id`) VALUES
 	(4, 22),
 	(4, 23),
 	(4, 30),
-	(4, 32);
+	(4, 32),
+	(4, 38),
+	(4, 39),
+	(4, 40),
+	(4, 41),
+	(4, 42);
 /*!40000 ALTER TABLE `role_url` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.urls
@@ -235,9 +295,9 @@ CREATE TABLE IF NOT EXISTS `urls` (
   `http_method` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pattern` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.urls: ~22 rows (approximately)
+-- Dumping data for table ecommerce_db.urls: ~29 rows (approximately)
 /*!40000 ALTER TABLE `urls` DISABLE KEYS */;
 INSERT IGNORE INTO `urls` (`id`, `description`, `http_method`, `pattern`) VALUES
 	(14, 'Login page', 'GET', '/login'),
@@ -263,7 +323,12 @@ INSERT IGNORE INTO `urls` (`id`, `description`, `http_method`, `pattern`) VALUES
 	(34, 'Api Order Management', 'GET', '/api/orders/**'),
 	(35, 'Api Order Client Management', 'GET', '/orders/**'),
 	(36, 'Api Admin Management', 'GET', '/api/admin/**'),
-	(37, 'Api Admin Management', 'PUT', '/api/admin/orders/**');
+	(37, 'Api Admin Management', 'PUT', '/api/admin/orders/**'),
+	(38, 'Profile Manager', 'GET', '/profile'),
+	(39, 'Adrresses Manager', 'GET', '/addresses'),
+	(40, 'Api Profile Manger', 'GET', '/api/profile/**'),
+	(41, 'Api Adresses Manger', 'GET', '/api/addresses/**'),
+	(42, 'Api Profile Change Manger', 'GET', '/api/profile/change-password/**');
 /*!40000 ALTER TABLE `urls` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.users
@@ -284,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT IGNORE INTO `users` (`id`, `email`, `enabled`, `full_name`, `password`, `role`, `username`) VALUES
 	(3, 'admin@email.com', b'1', 'Administrator', '$2a$10$kN14YPnGXQlgR1oIYhOhlO1/RlvYbfnN2j2D/E76.mIleKVhsweyS', NULL, 'admin'),
-	(4, 'user@email.com', b'1', 'Regular User', '$2a$10$w6JSDLmqg1QbazTv9cLJuuweBNBFuvIlQ0v4AuNb9hyZn4hfyMW1y', NULL, 'user'),
+	(4, 'user@email.com', b'1', 'Client User', '$2a$10$DCmlHJv1p8q.XVaFVjruYuLnJ8v21w6rLe8bnvPdNDtQ8NJMeYR2.', NULL, 'user'),
 	(8, 'phongnguyen1999.10.30@gmail.com', b'1', 'Nguyễn Chung Phong', '$2a$10$/vPabnBs4Pe.3pjrZjEc1.09JEe2R87SImzFF3tp708aZoIEsWWB.', NULL, 'phongnc');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
