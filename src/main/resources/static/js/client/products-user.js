@@ -136,7 +136,7 @@ class UserProductManager {
         try {
             // SỬA THÀNH AJAX
             $.ajax({
-                url: '/api/products/brands',
+                url: '/admin/api/products/brands',
                 type: 'GET',
                 success: (brands) => {
                     this.renderBrandFilters(brands);
