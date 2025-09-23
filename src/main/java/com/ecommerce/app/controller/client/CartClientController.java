@@ -28,6 +28,7 @@ public class CartClientController {
             model.addAttribute("cart", cart);
             model.addAttribute("totalItems", cart.getTotalItems());
             model.addAttribute("totalPrice", cart.getTotalPrice());
+            model.addAttribute("username", username);
 
             return "client/cart-client";
         } catch (Exception e) {

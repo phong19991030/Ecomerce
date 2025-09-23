@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - Ecommerce</title>
+    <title>Hồ sơ của tôi - Ecommerce</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/custom.css">
@@ -24,20 +24,19 @@
     </style>
 </head>
 <body>
-<!-- Navigation (same as dashboard) -->
+<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="/static">
+        <a class="navbar-brand" href="/">
             <i class="fas fa-shopping-cart me-2"></i>Ecommerce
         </a>
         <div class="navbar-nav ms-auto">
             <span class="navbar-text text-light me-3">
-                Xin chào, <strong th:text="${username}">User</strong>!
+                Xin chào, <strong th:text="${username}">Người dùng</strong>!
             </span>
-            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Products</a>
-            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
-            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Wishlist</a>
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
+            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Giỏ hàng</a>
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
         </div>
     </div>
 </nav>
@@ -48,22 +47,21 @@
             <!-- User Sidebar -->
             <div class="card">
                 <div class="card-header">
-                    <h5><i class="fas fa-user me-2"></i>My Account</h5>
+                    <h5><i class="fas fa-user me-2"></i>Tài khoản của tôi</h5>
                 </div>
                 <div class="list-group list-group-flush">
                     <a href="/dashboard" class="list-group-item list-group-item-action">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        <i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển
                     </a>
                     <a href="/profile" class="list-group-item list-group-item-action active">
-                        <i class="fas fa-user me-2"></i>Profile
+                        <i class="fas fa-user me-2"></i>Hồ sơ
                     </a>
                     <a href="/orders" class="list-group-item list-group-item-action">
-                        <i class="fas fa-shopping-bag me-2"></i>My Orders
+                        <i class="fas fa-shopping-bag me-2"></i>Đơn hàng của tôi
                     </a>
                     <a href="/addresses" class="list-group-item list-group-item-action">
-                        <i class="fas fa-address-book me-2"></i>Addresses
+                        <i class="fas fa-address-book me-2"></i>Địa chỉ
                     </a>
-
                 </div>
             </div>
         </div>
@@ -72,14 +70,14 @@
             <!-- Profile Content -->
             <div class="card profile-card">
                 <div class="card-header">
-                    <h4><i class="fas fa-user me-2"></i>My Profile</h4>
+                    <h4><i class="fas fa-user me-2"></i>Hồ sơ của tôi</h4>
                 </div>
                 <div class="card-body">
                     <form id="profileForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Username</label>
+                                    <label for="username" class="form-label">Tên đăng nhập</label>
                                     <input type="text" class="form-control" id="username"
                                            th:value="${profile.username}" readonly>
                                 </div>
@@ -93,41 +91,41 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="fullName" class="form-label">Full Name</label>
+                            <label for="fullName" class="form-label">Họ và tên</label>
                             <input type="text" class="form-control" id="fullName"
                                    th:value="${profile.fullName}" required>
                         </div>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Update Profile
+                            <i class="fas fa-save me-2"></i>Cập nhật hồ sơ
                         </button>
                     </form>
 
                     <hr>
 
-                    <h5 class="mt-4">Change Password</h5>
+                    <h5 class="mt-4">Đổi mật khẩu</h5>
                     <form id="passwordForm">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="currentPassword" class="form-label">Current Password</label>
+                                    <label for="currentPassword" class="form-label">Mật khẩu hiện tại</label>
                                     <input type="password" class="form-control" id="currentPassword" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="newPassword" class="form-label">New Password</label>
+                                    <label for="newPassword" class="form-label">Mật khẩu mới</label>
                                     <input type="password" class="form-control" id="newPassword" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                    <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
                                     <input type="password" class="form-control" id="confirmPassword" required>
                                 </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-warning">
-                            <i class="fas fa-key me-2"></i>Change Password
+                            <i class="fas fa-key me-2"></i>Đổi mật khẩu
                         </button>
                     </form>
                 </div>
@@ -139,7 +137,7 @@
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
-        <p>&copy; 2024 Ecommerce App. All rights reserved.</p>
+        <p>&copy; 2024 Ecommerce App. Tất cả quyền được bảo lưu.</p>
     </div>
 </footer>
 
@@ -147,7 +145,6 @@
 <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Lấy CSRF token từ meta tag
         const token = $("meta[name='_csrf']").attr("content");
         const header = $("meta[name='_csrf_header']").attr("content");
 
@@ -172,12 +169,12 @@
                 });
 
                 if (response.ok) {
-                    showAlert('Profile updated successfully!', 'success');
+                    showAlert('Đã cập nhật hồ sơ thành công!', 'success');
                 } else {
-                    showAlert('Error updating profile. Status: ' + response.status, 'danger');
+                    showAlert('Lỗi khi cập nhật hồ sơ. Mã lỗi: ' + response.status, 'danger');
                 }
             } catch (error) {
-                showAlert('Error updating profile: ' + error.message, 'danger');
+                showAlert('Lỗi khi cập nhật hồ sơ: ' + error.message, 'danger');
             }
         });
 
@@ -190,7 +187,7 @@
             const confirmPassword = $('#confirmPassword').val();
 
             if (newPassword !== confirmPassword) {
-                showAlert('New passwords do not match!', 'danger');
+                showAlert('Mật khẩu mới không khớp!', 'danger');
                 return;
             }
 
@@ -213,16 +210,16 @@
                 if (response.ok) {
                     const result = await response.json();
                     if (result.success) {
-                        showAlert('Password changed successfully!', 'success');
+                        showAlert('Đã đổi mật khẩu thành công!', 'success');
                         $('#passwordForm')[0].reset();
                     } else {
                         showAlert(result.message, 'danger');
                     }
                 } else {
-                    showAlert('Error changing password. Status: ' + response.status, 'danger');
+                    showAlert('Lỗi khi đổi mật khẩu. Mã lỗi: ' + response.status, 'danger');
                 }
             } catch (error) {
-                showAlert('Error changing password: ' + error.message, 'danger');
+                showAlert('Lỗi khi đổi mật khẩu: ' + error.message, 'danger');
             }
         });
 

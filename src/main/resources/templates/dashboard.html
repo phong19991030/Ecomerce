@@ -1,10 +1,10 @@
-<!-- src/main/resources/templates/dashboard.html -->
+<!-- src/main/resources/templates/dashboard/admin-dashboard.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Ecommerce</title>
+    <title>Trang quản trị - Ecommerce</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/custom.css">
@@ -14,18 +14,16 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <i class="fas fa-shopping-cart me-2"></i>Ecommerce
+            <i class="fas fa-shopping-cart me-2"></i>Ecommerce Admin
         </a>
-        <div th:if="${isAdmin}" class="alert alert-warning">
-            <i class="fas fa-crown me-2"></i>You have administrator privileges.
-        </div>
         <div class="navbar-nav ms-auto">
                 <span class="navbar-text text-light me-3">
-                    Xin chào, <strong th:text="${#authentication.name}">User</strong>!
+                    <i class="fas fa-crown me-1"></i> Xin chào, <strong th:text="${username}">Admin</strong>!
                 </span>
-            <a class="nav-link" href="/products"><i class="fas fa-box me-1"></i>Sản phẩm</a>
-            <a class="nav-link" href="#"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+            <a class="nav-link" href="/admin/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
+            <a class="nav-link" href="/admin/orders"><i class="fas fa-shopping-bag me-1"></i> Đơn hàng</a>
+            <a class="nav-link" href="/admin/users"><i class="fas fa-users me-1"></i> Người dùng</a>
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
         </div>
     </div>
 </nav>
@@ -34,82 +32,159 @@
 <main class="container mt-4">
     <div class="row">
         <div class="col-md-3">
-            <!-- Sidebar -->
+            <!-- Admin Sidebar -->
             <div class="card">
-                <div class="card-header">
-                    <h5>User Dashboard</h5>
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển</h5>
                 </div>
                 <div class="list-group list-group-flush">
                     <a href="/dashboard" class="list-group-item list-group-item-action active">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        <i class="fas fa-chart-line me-2"></i>Bảng điều khiển
                     </a>
-                    <a href="/profile" class="list-group-item list-group-item-action">
-                        <i class="fas fa-user me-2"></i>Profile
+                    <a href="/admin/products" class="list-group-item list-group-item-action">
+                        <i class="fas fa-box me-2"></i>Quản lý sản phẩm
                     </a>
-                    <a href="/orders" class="list-group-item list-group-item-action">
-                        <i class="fas fa-shopping-bag me-2"></i>Orders
+                    <a href="/admin/orders" class="list-group-item list-group-item-action">
+                        <i class="fas fa-shopping-bag me-2"></i>Quản lý đơn hàng
                     </a>
-
+                    <a href="/admin/users" class="list-group-item list-group-item-action">
+                        <i class="fas fa-users me-2"></i>Quản lý người dùng
+                    </a>
+                    <a href="/admin/reports" class="list-group-item list-group-item-action">
+                        <i class="fas fa-chart-bar me-2"></i>Báo cáo
+                    </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-9">
-            <!-- Main dashboard content -->
+            <!-- Admin Dashboard content -->
             <div class="card">
                 <div class="card-header">
-                    <h4>Welcome to Your Dashboard</h4>
+                    <h4><i class="fas fa-chart-line me-2"></i>Bảng điều khiển quản trị</h4>
                 </div>
                 <div class="card-body">
+                    <!-- Statistics Cards -->
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card text-white bg-primary mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title">Orders</h5>
-                                    <p class="card-text">5 orders placed</p>
+                                    <h5 class="card-title">Tổng người dùng</h5>
+                                    <p class="card-text display-6" th:text="${totalUsers}">150</p>
+                                    <i class="fas fa-users fa-2x float-end"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-success mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Tổng sản phẩm</h5>
+                                    <p class="card-text display-6" th:text="${totalProducts}">456</p>
+                                    <i class="fas fa-box fa-2x float-end"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-warning mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Tổng đơn hàng</h5>
+                                    <p class="card-text display-6" th:text="${totalOrders}">89</p>
                                     <i class="fas fa-shopping-bag fa-2x float-end"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card text-white bg-success mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Cart Items</h5>
-                                    <p class="card-text">3 items in cart</p>
-                                    <i class="fas fa-shopping-cart fa-2x float-end"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card text-white bg-info mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title">Wishlist</h5>
-                                    <p class="card-text">7 saved items</p>
-                                    <i class="fas fa-heart fa-2x float-end"></i>
+                                    <h5 class="card-title">Tổng doanh thu</h5>
+                                    <p class="card-text display-6">$<span th:text="${#numbers.formatDecimal(totalRevenue, 0, 2)}">12,500.00</span></p>
+                                    <i class="fas fa-dollar-sign fa-2x float-end"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        <h5>Recent Activity</h5>
-                        <div class="list-group">
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between">
-                                    <span>Order #12345 placed</span>
-                                    <small class="text-muted">2 hours ago</small>
+                    <!-- Recent Orders -->
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-shopping-bag me-2"></i>Đơn hàng gần đây</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                            <tr>
+                                                <th>Mã đơn hàng</th>
+                                                <th>Khách hàng</th>
+                                                <th>Số tiền</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="order : ${recentOrders}">
+                                                <td th:text="${order.orderId}">ORD-001</td>
+                                                <td th:text="${order.name}">John Doe</td>
+                                                <td>$<span th:text="${#numbers.formatDecimal(order.amount, 0, 2)}">250.00</span></td>
+                                                <!--                                                <td><span class="badge bg-warning" th:text="${order.status}">Pending</span></td>-->
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between">
-                                    <span>Product added to cart</span>
-                                    <small class="text-muted">5 hours ago</small>
+                        </div>
+
+                        <!-- Top Products -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-star me-2"></i>Sản phẩm bán chạy</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                            <tr>
+                                                <th>Sản phẩm</th>
+                                                <th>Đã bán</th>
+                                                <th>Doanh thu</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="product : ${topProducts}">
+                                                <td th:text="${product.name}">Laptop Gaming</td>
+                                                <td th:text="${product.sold}">45</td>
+                                                <td>$<span th:text="${#numbers.formatDecimal(product.revenue, 0, 2)}">22,500.00</span></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between">
-                                    <span>Account updated</span>
-                                    <small class="text-muted">1 day ago</small>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-bolt me-2"></i>Thao tác nhanh</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2 d-md-flex">
+                                        <a href="/admin/products/new" class="btn btn-primary me-2">
+                                            <i class="fas fa-plus me-2"></i>Thêm mới sản phẩm
+                                        </a>
+                                        <a href="/admin/orders" class="btn btn-success me-2">
+                                            <i class="fas fa-eye me-2"></i>Xem tất cả đơn hàng
+                                        </a>
+                                        <a href="/admin/reports" class="btn btn-info">
+                                            <i class="fas fa-chart-bar me-2"></i>Tạo báo cáo
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +198,7 @@
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
-        <p>&copy; 2024 Ecommerce App. All rights reserved.</p>
+        <p>&copy; 2024 Ecommerce App. Bảng quản trị</p>
     </div>
 </footer>
 

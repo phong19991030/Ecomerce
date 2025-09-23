@@ -32,6 +32,7 @@ public class CheckoutController {
                 return "redirect:/cart?error=empty";
             }
 
+            model.addAttribute("username", username);
             model.addAttribute("cart", cart);
             return "client/checkout";
 

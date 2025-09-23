@@ -97,6 +97,11 @@ class UserProductManager {
                 ...this.currentSearchParams
             };
 
+            // if (params.categoryId) {
+            //     params.category = params.categoryId;
+            //     delete params.categoryId;
+            // }
+
             // Remove empty parameters
             Object.keys(params).forEach(key => {
                 if (params[key] === null || params[key] === undefined || params[key] === '') {
@@ -248,15 +253,14 @@ class UserProductManager {
             delete filters.brand;
         }
 
-        // Category filters - QUAN TRỌNG: Đây là phần filter danh mục
         const selectedCategories = [];
         $('.category-filter:checked').each(function () {
             selectedCategories.push($(this).val());
         });
         if (selectedCategories.length > 0) {
-            filters.categoryId = selectedCategories.join(',');
+            filters.category = selectedCategories.join(',');
         } else {
-            delete filters.categoryId;
+            delete filters.category;
         }
 
         // Stock filter

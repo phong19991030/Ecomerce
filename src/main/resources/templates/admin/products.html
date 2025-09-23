@@ -22,11 +22,11 @@
             <span class="navbar-text text-light me-3">
                 <i class="fas fa-crown me-1"></i> Xin chào, <strong th:text="${username}">Admin</strong>!
             </span>
-            <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
-            <a class="nav-link active" href="/admin/products"><i class="fas fa-box me-1"></i> Products</a>
-            <a class="nav-link" href="/admin/orders"><i class="fas fa-shopping-bag me-1"></i> Orders</a>
-            <a class="nav-link" href="/admin/users"><i class="fas fa-users me-1"></i> Users</a>
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+            <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-1"></i> Bảng điều khiển</a>
+            <a class="nav-link active" href="/admin/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
+            <a class="nav-link" href="/admin/orders"><i class="fas fa-shopping-bag me-1"></i> Đơn hàng</a>
+            <a class="nav-link" href="/admin/users"><i class="fas fa-users me-1"></i> Người dùng</a>
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
         </div>
     </div>
 </nav>
@@ -38,23 +38,23 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h5><i class="fas fa-tachometer-alt me-2"></i>Admin Panel</h5>
+                    <h5><i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển</h5>
                 </div>
                 <div class="list-group list-group-flush">
                     <a href="/dashboard" class="list-group-item list-group-item-action">
-                        <i class="fas fa-chart-line me-2"></i>Dashboard
+                        <i class="fas fa-chart-line me-2"></i>Bảng điều khiển
                     </a>
                     <a href="/admin/products" class="list-group-item list-group-item-action active">
                         <i class="fas fa-box me-2"></i>Quản lý sản phẩm
                     </a>
                     <a href="/admin/orders" class="list-group-item list-group-item-action">
-                        <i class="fas fa-shopping-bag me-2"></i>Order Management
+                        <i class="fas fa-shopping-bag me-2"></i>Quản lý đơn hàng
                     </a>
                     <a href="/admin/users" class="list-group-item list-group-item-action">
-                        <i class="fas fa-users me-2"></i>User Management
+                        <i class="fas fa-users me-2"></i>Quản lý người dùng
                     </a>
                     <a href="/admin/reports" class="list-group-item list-group-item-action">
-                        <i class="fas fa-chart-bar me-2"></i>Reports
+                        <i class="fas fa-chart-bar me-2"></i>Báo cáo
                     </a>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                                                placeholder="Giá tối đa" step="0.01">
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="form-label small mb-1">Nhà sản xuât</label>
+                                        <label class="form-label small mb-1">Nhà sản xuất</label>
                                         <select class="form-control form-select" name="brand" id="searchBrand">
                                             <option value="">Tất cả</option>
                                             <!-- Brands sẽ được load bằng JS -->
@@ -110,17 +110,17 @@
                                         <label class="form-label small mb-1">Trạng thái</label>
                                         <select class="form-control form-select" name="active" id="searchActive">
                                             <option value="">Tất cả</option>
-                                            <option value="true">Active</option>
-                                            <option value="false">Inactive</option>
+                                            <option value="true">Đang hoạt động</option>
+                                            <option value="false">Ngừng hoạt động</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="d-flex gap-2" style="height: 38px;">
                                             <button type="submit" class="btn btn-primary flex-fill d-flex align-items-center justify-content-center">
-                                                <i class="fas fa-search me-2"></i>Search
+                                                <i class="fas fa-search me-2"></i>Tìm kiếm
                                             </button>
                                             <button type="button" id="clearSearch" class="btn btn-secondary flex-fill d-flex align-items-center justify-content-center">
-                                                <i class="fas fa-times me-2"></i>Clear
+                                                <i class="fas fa-times me-2"></i>Xóa
                                             </button>
                                         </div>
                                     </div>
@@ -136,12 +136,12 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Ảnh</th>
-                                <th>Tên </th>
+                                <th>Tên sản phẩm</th>
                                 <th>Giá tiền</th>
-                                <th>Stock</th>
-                                <th>Hạng mục</th>
+                                <th>Tồn kho</th>
+                                <th>Danh mục</th>
                                 <th>Trạng thái</th>
-                                <th>Hoạt động</th>
+                                <th>Thao tác</th>
                             </tr>
                             </thead>
                             <tbody id="productsContainer">
@@ -153,9 +153,9 @@
                     <!-- Loading spinner -->
                     <div id="loadingSpinner" class="text-center d-none my-4">
                         <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                            <span class="visually-hidden">Đang tải...</span>
                         </div>
-                        <p class="mt-2">Loading products...</p>
+                        <p class="mt-2">Đang tải sản phẩm...</p>
                     </div>
 
                     <!-- Pagination container -->
@@ -179,7 +179,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="fas fa-exclamation-triangle text-warning me-2"></i>
-                    Confirm Delete
+                    Xác nhận xóa
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -204,7 +204,7 @@
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
-        <p>&copy; 2024 Ecommerce App. Administrator Panel</p>
+        <p>&copy; 2024 Ecommerce App. Bảng quản trị</p>
     </div>
 </footer>
 

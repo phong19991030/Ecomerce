@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đơn hàng của tôi - Ecommerce Store</title>
+    <title>Đơn hàng của tôi - Cửa hàng Thương mại Điện tử</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/custom.css">
@@ -13,48 +13,47 @@
 </head>
 <body>
 
-<!-- Navigation -->
+<!-- Điều hướng -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <i class="fas fa-shopping-cart me-2"></i>Ecommerce
+            <i class="fas fa-shopping-cart me-2"></i>Thương mại Điện tử
         </a>
         <div class="navbar-nav ms-auto">
             <span class="navbar-text text-light me-3">
-                Xin chào, <strong th:text="${username} ? ${username} : 'Khách'">User</strong>!
+                Xin chào, <strong th:text="${username} ? ${username} : 'Khách'">Người dùng</strong>!
             </span>
-            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Products</a>
-            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
-            <a class="nav-link active" href="/orders"><i class="fas fa-clipboard-list me-1"></i> Orders</a>
-            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Wishlist</a>
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
+            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Giỏ hàng</a>
+            <a class="nav-link active" href="/orders"><i class="fas fa-clipboard-list me-1"></i> Đơn hàng</a>
+            <!--            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Danh sách yêu thích</a>-->
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
         </div>
     </div>
 </nav>
 
-<!-- Main Content -->
+<!-- Nội dung chính -->
 <main class="container mt-4">
     <div class="row">
-        <!-- Sidebar -->
+        <!-- Thanh bên -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
-                    <h5><i class="fas fa-user me-2"></i>My Account</h5>
+                    <h5><i class="fas fa-user me-2"></i>Tài khoản của tôi</h5>
                 </div>
                 <div class="list-group list-group-flush">
                     <a href="/dashboard" class="list-group-item list-group-item-action">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        <i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển
                     </a>
                     <a href="/profile" class="list-group-item list-group-item-action">
-                        <i class="fas fa-user me-2"></i>Profile
+                        <i class="fas fa-user me-2"></i>Hồ sơ
                     </a>
                     <a href="/orders" class="list-group-item list-group-item-action active">
-                        <i class="fas fa-shopping-bag me-2"></i>My Orders
+                        <i class="fas fa-shopping-bag me-2"></i>Đơn hàng của tôi
                     </a>
                     <a href="/addresses" class="list-group-item list-group-item-action">
-                        <i class="fas fa-address-book me-2"></i>Addresses
+                        <i class="fas fa-address-book me-2"></i>Địa chỉ
                     </a>
-
                 </div>
             </div>
         </div>
@@ -65,21 +64,21 @@
                 <i class="fas fa-clipboard-list me-2"></i>Đơn hàng của tôi
             </h1>
 
-            <!-- Loading Spinner -->
+            <!-- Vòng quay tải -->
             <div id="loadingSpinner" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">Đang tải...</span>
                 </div>
                 <p class="mt-2">Đang tải danh sách đơn hàng...</p>
             </div>
 
-            <!-- Error Message -->
+            <!-- Thông báo lỗi -->
             <div id="errorMessage" class="alert alert-danger d-none" role="alert">
                 <i class="fas fa-exclamation-triangle me-2"></i>
                 <span id="errorText"></span>
             </div>
 
-            <!-- Empty Orders -->
+            <!-- Đơn hàng trống -->
             <div id="emptyOrders" class="text-center py-5 d-none">
                 <i class="fas fa-clipboard-list fa-4x text-muted mb-4"></i>
                 <h3 class="text-muted">Chưa có đơn hàng nào</h3>
@@ -89,7 +88,7 @@
                 </a>
             </div>
 
-            <!-- Orders List -->
+            <!-- Danh sách đơn hàng -->
             <div id="ordersList" class="card d-none">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -106,7 +105,7 @@
                             </tr>
                             </thead>
                             <tbody id="ordersTableBody">
-                            <!-- Orders will be populated by JavaScript -->
+                            <!-- Đơn hàng sẽ được điền bằng JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -116,10 +115,10 @@
     </div>
 </main>
 
-<!-- Footer -->
+<!-- Chân trang -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
-        <p>&copy; 2024 Ecommerce App. All rights reserved.</p>
+        <p>&copy; 2024 Ứng dụng Thương mại Điện tử. Tất cả các quyền được bảo lưu.</p>
     </div>
 </footer>
 

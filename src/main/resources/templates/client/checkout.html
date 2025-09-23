@@ -23,11 +23,11 @@
             <span class="navbar-text text-light me-3">
                 Xin chào, <strong th:text="${username} ? ${username} : 'Khách'">User</strong>!
             </span>
-            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Products</a>
-            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
-            <a class="nav-link active" href="/checkout"><i class="fas fa-credit-card me-1"></i> Checkout</a>
-            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Wishlist</a>
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
+            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Giỏ hàng</a>
+            <a class="nav-link active" href="/checkout"><i class="fas fa-credit-card me-1"></i> Thanh toán</a>
+            <!--            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Danh sách yêu thích</a>-->
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
         </div>
     </div>
 </nav>
@@ -39,24 +39,24 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
-                    <h5><i class="fas fa-user me-2"></i>My Account</h5>
+                    <h5><i class="fas fa-user me-2"></i>Tài khoản của tôi</h5>
                 </div>
                 <div class="list-group list-group-flush">
                     <a href="/dashboard" class="list-group-item list-group-item-action">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        <i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển
                     </a>
                     <a href="/profile" class="list-group-item list-group-item-action">
-                        <i class="fas fa-user me-2"></i>Profile
+                        <i class="fas fa-user me-2"></i>Hồ sơ
                     </a>
                     <a href="/orders" class="list-group-item list-group-item-action">
-                        <i class="fas fa-shopping-bag me-2"></i>My Orders
+                        <i class="fas fa-shopping-bag me-2"></i>Đơn hàng của tôi
                     </a>
                     <a href="/addresses" class="list-group-item list-group-item-action">
-                        <i class="fas fa-address-book me-2"></i>Addresses
+                        <i class="fas fa-address-book me-2"></i>Địa chỉ
                     </a>
-<!--                    <a href="/settings" class="list-group-item list-group-item-action">-->
-<!--                        <i class="fas fa-cog me-2"></i>Settings-->
-<!--                    </a>-->
+                    <!--                    <a href="/settings" class="list-group-item list-group-item-action">-->
+                    <!--                        <i class="fas fa-cog me-2"></i>Cài đặt-->
+                    <!--                    </a>-->
                 </div>
             </div>
         </div>

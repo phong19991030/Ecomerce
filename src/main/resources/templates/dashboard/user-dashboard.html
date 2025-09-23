@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard - Ecommerce</title>
+    <title>Bảng Điều Khiển Cá Nhân - Ecommerce</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/custom.css">
@@ -18,12 +18,11 @@
         </a>
         <div class="navbar-nav ms-auto">
                 <span class="navbar-text text-light me-3">
-                    Xin chào, <strong th:text="${username}">User</strong>!
+                    Xin chào, <strong th:text="${username}">Người dùng</strong>!
                 </span>
-            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Products</a>
-            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
-            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Wishlist</a>
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+            <a class="nav-link" href="/client/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
+            <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Giỏ hàng</a>
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
         </div>
     </div>
 </nav>
@@ -35,22 +34,21 @@
             <!-- User Sidebar -->
             <div class="card">
                 <div class="card-header">
-                    <h5><i class="fas fa-user me-2"></i>My Account</h5>
+                    <h5><i class="fas fa-user me-2"></i>Tài khoản của tôi</h5>
                 </div>
                 <div class="list-group list-group-flush">
                     <a href="/dashboard" class="list-group-item list-group-item-action active">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        <i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển
                     </a>
                     <a href="/profile" class="list-group-item list-group-item-action">
-                        <i class="fas fa-user me-2"></i>Profile
+                        <i class="fas fa-user me-2"></i>Hồ sơ
                     </a>
                     <a href="/orders" class="list-group-item list-group-item-action">
-                        <i class="fas fa-shopping-bag me-2"></i>My Orders
+                        <i class="fas fa-shopping-bag me-2"></i>Đơn hàng của tôi
                     </a>
                     <a href="/addresses" class="list-group-item list-group-item-action">
-                        <i class="fas fa-address-book me-2"></i>Addresses
+                        <i class="fas fa-address-book me-2"></i>Địa chỉ
                     </a>
-
                 </div>
             </div>
         </div>
@@ -59,7 +57,7 @@
             <!-- User Dashboard content -->
             <div class="card">
                 <div class="card-header">
-                    <h4><i class="fas fa-tachometer-alt me-2"></i>My Dashboard</h4>
+                    <h4><i class="fas fa-tachometer-alt me-2"></i>Bảng Điều Khiển Của Tôi</h4>
                 </div>
                 <div class="card-body">
                     <!-- Statistics Cards -->
@@ -67,7 +65,7 @@
                         <div class="col-md-3">
                             <div class="card text-white bg-primary mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title">Total Orders</h5>
+                                    <h5 class="card-title">Tổng Đơn Hàng</h5>
                                     <p class="card-text display-6" th:text="${totalOrders}">5</p>
                                     <i class="fas fa-shopping-bag fa-2x float-end"></i>
                                 </div>
@@ -76,7 +74,7 @@
                         <div class="col-md-3">
                             <div class="card text-white bg-success mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title">Cart Items</h5>
+                                    <h5 class="card-title">Sản phẩm trong giỏ</h5>
                                     <p class="card-text display-6" th:text="${cartItems}">3</p>
                                     <i class="fas fa-shopping-cart fa-2x float-end"></i>
                                 </div>
@@ -85,7 +83,7 @@
                         <div class="col-md-3">
                             <div class="card text-white bg-info mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title">Wishlist</h5>
+                                    <h5 class="card-title">Yêu thích</h5>
                                     <p class="card-text display-6" th:text="${wishlistItems}">7</p>
                                     <i class="fas fa-heart fa-2x float-end"></i>
                                 </div>
@@ -94,7 +92,7 @@
                         <div class="col-md-3">
                             <div class="card text-white bg-warning mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title">Loyalty Points</h5>
+                                    <h5 class="card-title">Điểm tích lũy</h5>
                                     <p class="card-text display-6" th:text="${loyaltyPoints}">1250</p>
                                     <i class="fas fa-star fa-2x float-end"></i>
                                 </div>
@@ -107,16 +105,16 @@
                         <div class="col-md-8">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5><i class="fas fa-history me-2"></i>Recent Orders</h5>
+                                    <h5><i class="fas fa-history me-2"></i>Đơn Hàng Gần Đây</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-sm">
                                             <thead>
                                             <tr>
-                                                <th>Order ID</th>
-                                                <th>Product</th>
-                                                <th>Amount</th>
+                                                <th>Mã đơn hàng</th>
+                                                <th>Sản phẩm</th>
+                                                <th>Giá tiền</th>
                                                 <th>Trạng thái</th>
                                             </tr>
                                             </thead>
@@ -124,17 +122,24 @@
                                             <tr th:each="order : ${recentOrders}">
                                                 <td th:text="${order.orderId}">ORD-001</td>
                                                 <td th:text="${order.name}">Laptop Gaming</td>
-                                                <td>$<span th:text="${#numbers.formatDecimal(order.amount, 0, 2)}">250.00</span></td>
+                                                <td><span th:text="${#numbers.formatDecimal(order.amount, 0, 2)}">250.00</span> VND</td>
                                                 <td>
-<!--                                                            <span th:classappend="${order.status == 'Delivered'} ? 'bg-success' :-->
-<!--                                                                                 ${order.status == 'Processing'} ? 'bg-warning' : 'bg-info'"-->
-<!--                                                                  class="badge" th:text="${order.status}">Delivered</span>-->
+                                                    <span th:switch="${order.status}">
+                                                        <span th:case="'Delivered'" class="badge bg-success">Đã giao hàng</span>
+                                                        <span th:case="'Processing'" class="badge bg-warning">Đang xử lý</span>
+                                                        <span th:case="'Shipped'" class="badge bg-info">Đang giao hàng</span>
+                                                        <span th:case="'Cancelled'" class="badge bg-danger">Đã hủy</span>
+                                                        <span th:case="*" class="badge bg-secondary" th:text="${order.status}"></span>
+                                                    </span>
                                                 </td>
+                                            </tr>
+                                            <tr th:if="${recentOrders == null or recentOrders.empty}">
+                                                <td colspan="4" class="text-center text-muted">Chưa có đơn hàng nào</td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <a href="/orders" class="btn btn-outline-primary btn-sm">View All Orders</a>
+                                    <a href="/orders" class="btn btn-outline-primary btn-sm">Xem tất cả đơn hàng</a>
                                 </div>
                             </div>
                         </div>
@@ -143,17 +148,19 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5><i class="fas fa-lightbulb me-2"></i>Recommended For You</h5>
+                                    <h5><i class="fas fa-lightbulb me-2"></i>Gợi ý cho bạn</h5>
                                 </div>
                                 <div class="card-body">
                                     <ul class="list-group list-group-flush">
-                                        <li th:each="product : ${recommendedProducts}"
-                                            class="list-group-item">
+                                        <li th:each="product : ${recommendedProducts}" class="list-group-item">
                                             <i class="fas fa-arrow-right text-primary me-2"></i>
-                                            <span th:text="${product}">Wireless Mouse</span>
+                                            <span th:text="${product}">Chuột không dây</span>
+                                        </li>
+                                        <li th:if="${recommendedProducts == null or recommendedProducts.empty}" class="list-group-item text-muted">
+                                            <i class="fas fa-info-circle me-2"></i>Chưa có gợi ý
                                         </li>
                                     </ul>
-                                    <a href="/client/products" class="btn btn-outline-success btn-sm mt-3">Browse Products</a>
+                                    <a href="/client/products" class="btn btn-outline-success btn-sm mt-3">Duyệt sản phẩm</a>
                                 </div>
                             </div>
                         </div>
@@ -164,19 +171,19 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                                    <h5><i class="fas fa-bolt me-2"></i>Thao tác nhanh</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="d-grid gap-2 d-md-flex">
                                         <a href="/client/products" class="btn btn-primary me-2">
-                                            <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                                            <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
                                         </a>
                                         <a href="/client/cart" class="btn btn-success me-2">
-                                            <i class="fas fa-shopping-cart me-2"></i>View Cart
+                                            <i class="fas fa-shopping-cart me-2"></i>Xem giỏ hàng
                                         </a>
-                                        <a href="/wishlist" class="btn btn-info">
-                                            <i class="fas fa-heart me-2"></i>View Wishlist
-                                        </a>
+<!--                                        <a href="/wishlist" class="btn btn-info">-->
+<!--                                            <i class="fas fa-heart me-2"></i>Xem danh sách yêu thích-->
+<!--                                        </a>-->
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +198,7 @@
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
-        <p>&copy; 2024 Ecommerce App. All rights reserved.</p>
+        <p>&copy; 2024 Ecommerce App. Tất cả quyền được bảo lưu.</p>
     </div>
 </footer>
 
