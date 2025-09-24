@@ -6,7 +6,7 @@ class CheckoutManager {
 
     init() {
         this.setupEventListeners();
-        this.loadUserInfo();
+        // this.loadUserInfo();
     }
 
     setupEventListeners() {
@@ -14,38 +14,128 @@ class CheckoutManager {
         $('#sameAsProfile').on('change', (e) => this.toggleSameAsProfile(e));
     }
 
-    async loadUserInfo() {
-        // try {
-        //     // Load user profile information to pre-fill form
-        //     const response = await fetch('/api/user/profile');
-        //     if (response.ok) {
-        //         const user = await response.json();
-        //         this.prefillForm(user);
-        //     }
-        // } catch (error) {
-        //     console.error('Error loading user info:', error);
-        // }
+    loadUserInfo() {
+        // Sử dụng AJAX để lấy thông tin profile và địa chỉ mặc định
+        this.loadProfileInfo();
+        this.loadDefaultAddress();
     }
 
-    prefillForm(user) {
-        if (user.fullName) {
-            $('#customerName').val(user.fullName);
+    loadProfileInfo() {
+        // Lấy thông tin profile của user
+        $.ajax({
+            url: '/api/profile',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                const token = $("meta[name='_csrf']").attr("content");
+                const header = $("meta[name='_csrf_header']").attr("content");
+                if (token && header) {
+                    xhr.setRequestHeader(header, token);
+                }
+            },
+            success: (response) => {
+                this.prefillProfileInfo(response);
+            },
+            error: (xhr, status, error) => {
+                console.error('Error loading profile info:', error);
+            }
+        });
+    }
+
+    loadDefaultAddress() {
+        // Lấy địa chỉ mặc định của user
+        $.ajax({
+            url: '/api/addresses/default',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                const token = $("meta[name='_csrf']").attr("content");
+                const header = $("meta[name='_csrf_header']").attr("content");
+                if (token && header) {
+                    xhr.setRequestHeader(header, token);
+                }
+            },
+            success: (response) => {
+                this.prefillAddressInfo(response);
+            },
+            error: (xhr, status, error) => {
+                console.error('Error loading default address:', error);
+                // Fallback: thử lấy danh sách địa chỉ
+                this.loadFirstAddress();
+            }
+        });
+    }
+
+    loadFirstAddress() {
+        // Fallback: lấy danh sách địa chỉ và chọn cái đầu tiên
+        $.ajax({
+            url: '/api/addresses',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                const token = $("meta[name='_csrf']").attr("content");
+                const header = $("meta[name='_csrf_header']").attr("content");
+                if (token && header) {
+                    xhr.setRequestHeader(header, token);
+                }
+            },
+            success: (response) => {
+                if (response && response.length > 0) {
+                    this.prefillAddressInfo(response[0]);
+                }
+            },
+            error: (xhr, status, error) => {
+                console.error('Error loading addresses:', error);
+            }
+        });
+    }
+
+    prefillProfileInfo(profile) {
+        if (profile) {
+            if (profile.fullName) {
+                $('#customerName').val(profile.fullName);
+            }
+            if (profile.email) {
+                $('#customerEmail').val(profile.email);
+            }
+            if (profile.phone) {
+                $('#customerPhone').val(profile.phone);
+            }
         }
-        if (user.email) {
-            $('#customerEmail').val(user.email);
+    }
+
+    prefillAddressInfo(address) {
+        if (address) {
+            const fullAddress = this.buildFullAddress(address);
+            if (fullAddress) {
+                $('#shippingAddress').val(fullAddress);
+            }
         }
-        if (user.phone) {
-            $('#customerPhone').val(user.phone);
-        }
-        if (user.address) {
-            $('#shippingAddress').val(user.address);
-        }
+    }
+
+    buildFullAddress(address) {
+        if (!address) return '';
+
+        const parts = [];
+        if (address.street) parts.push(address.street);
+        if (address.city) parts.push(address.city);
+        if (address.state) parts.push(address.state);
+        if (address.zipCode) parts.push(address.zipCode);
+        if (address.country) parts.push(address.country);
+
+        return parts.join(', ');
     }
 
     toggleSameAsProfile(e) {
         if (e.target.checked) {
             this.loadUserInfo();
+        } else {
+            this.clearForm();
         }
+    }
+
+    clearForm() {
+        $('#customerName').val('');
+        $('#customerEmail').val('');
+        $('#customerPhone').val('');
+        $('#shippingAddress').val('');
     }
 
     async handleCheckout(e) {
