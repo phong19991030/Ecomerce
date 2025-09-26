@@ -8,6 +8,7 @@ import com.ecommerce.app.dto.ProductDTO;
 import com.ecommerce.app.entity.*;
 import com.ecommerce.app.repository.CartRepository;
 import com.ecommerce.app.repository.OrderRepository;
+import com.ecommerce.app.repository.ProductRepository;
 import com.ecommerce.app.repository.UserRepository;
 import com.ecommerce.app.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
     @Override
     @Transactional
@@ -176,6 +178,32 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderDTO> filterOrders(String status, String paymentStatus, Pageable pageable) {
         Page<Order> orders = orderRepository.filterOrders(status, paymentStatus, pageable);
         return orders.map(this::convertToDTO);
+    }
+
+    @Override
+    @Transactional
+    public void deductProductQuantities(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+
+        // Kiểm tra lại điều kiện để chắc chắn
+        if (!"PAID".equalsIgnoreCase(order.getPaymentStatus()) ||
+                !"DELIVERED".equalsIgnoreCase(order.getStatus())) {
+            throw new RuntimeException("Order is not in PAID and DELIVERED status");
+        }
+
+        for (OrderItem item : order.getItems()) {
+            Product product = item.getProduct();
+            int quantityToDeduct = item.getQuantity();
+
+            if (product.getStock() < quantityToDeduct) {
+                throw new RuntimeException("Insufficient stock for product: " + product.getName());
+            }
+
+            // Trừ số lượng sản phẩm
+            product.setStock(product.getStock() - quantityToDeduct);
+            productRepository.save(product);
+        }
     }
 
     private OrderDTO convertToDTO(Order order) {

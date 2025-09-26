@@ -79,8 +79,8 @@ class AdminOrderDetailManager {
                     <i class="fas fa-receipt me-2"></i>Đơn hàng #${order.orderNumber}
                 </h4>
                 <div>
-                    <span class="badge me-2 ${this.getStatusBadgeClass(order.status)}">${order.status}</span>
-                    <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${order.paymentStatus}</span>
+                    <span class="badge me-2 ${this.getStatusBadgeClass(order.status)}">${this.getStatusText(order.status)}</span>
+                    <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${this.getPaymentStatusText(order.paymentStatus)}</span>
                 </div>
             </div>
         </div>
@@ -102,7 +102,7 @@ class AdminOrderDetailManager {
                     <div class="ms-4">
                         <p><strong>Phương thức:</strong> ${order.paymentMethod}</p>
                         <p><strong>Trạng thái:</strong> 
-                            <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${order.paymentStatus}</span>
+                            <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${this.getPaymentStatusText(order.paymentStatus)}</span>
                         </p>
                         <p><strong>Ngày đặt:</strong> ${this.formatDateTime(order.orderDate)}</p>
                         <p><strong>Cập nhật:</strong> ${this.formatDateTime(order.updatedDate)}</p>
@@ -172,7 +172,7 @@ class AdminOrderDetailManager {
                 <button class="btn btn-primary me-2" onclick="orderDetailManager.openEditModal()">
                     <i class="fas fa-edit me-2"></i>Chỉnh sửa
                 </button>
-                ${order.status === 'PENDING' ? `
+                ${order.status === 'PENDING' || order.status === 'Chờ xử lý' ? `
                 <button class="btn btn-danger me-2" onclick="orderDetailManager.cancelOrder('${order.orderNumber}')">
                     <i class="fas fa-times me-2"></i>Hủy đơn hàng
                 </button>
@@ -185,6 +185,7 @@ class AdminOrderDetailManager {
         </div>
     `;
     }
+
     createOrderItemHTML(item) {
         return `
             <tr>
@@ -220,27 +221,27 @@ class AdminOrderDetailManager {
         modal.show();
     }
 
-// Sửa method createEditFormHTML
     createEditFormHTML() {
         return `
         <form id="editOrderForm">
             <div class="mb-3">
                 <label class="form-label">Trạng thái đơn hàng</label>
                 <select class="form-select" id="editStatus" name="status">
-                    <option value="PENDING" ${this.order.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
-                    <option value="PROCESSING" ${this.order.status === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
-                    <option value="DELIVERED" ${this.order.status === 'DELIVERED' ? 'selected' : ''}>DELIVERED</option>
-                    <option value="CANCELLED" ${this.order.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+                    <option value="PENDING" ${this.order.status === 'PENDING' ? 'selected' : ''}>Chờ xử lý</option>
+                    <option value="PROCESSING" ${this.order.status === 'PROCESSING' ? 'selected' : ''}>Đang xử lý</option>
+                    <option value="SHIPPED" ${this.order.status === 'SHIPPED' ? 'selected' : ''}>Đang giao hàng</option>
+                    <option value="DELIVERED" ${this.order.status === 'DELIVERED' ? 'selected' : ''}>Đã giao hàng</option>
+                    <option value="CANCELLED" ${this.order.status === 'CANCELLED' ? 'selected' : ''}>Đã hủy</option>
                 </select>
             </div>
             
             <div class="mb-3">
                 <label class="form-label">Trạng thái thanh toán</label>
                 <select class="form-select" id="editPaymentStatus" name="paymentStatus">
-                    <option value="PENDING" ${this.order.paymentStatus === 'PENDING' ? 'selected' : ''}>PENDING</option>
-                    <option value="PAID" ${this.order.paymentStatus === 'PAID' ? 'selected' : ''}>PAID</option>
-                    <option value="FAILED" ${this.order.paymentStatus === 'FAILED' ? 'selected' : ''}>FAILED</option>
-                    <option value="REFUNDED" ${this.order.paymentStatus === 'REFUNDED' ? 'selected' : ''}>REFUNDED</option>
+                    <option value="PENDING" ${this.order.paymentStatus === 'PENDING' ? 'selected' : ''}>Đang chờ thanh toán</option>
+                    <option value="PAID" ${this.order.paymentStatus === 'PAID' ? 'selected' : ''}>Đã thanh toán</option>
+                    <option value="FAILED" ${this.order.paymentStatus === 'FAILED' ? 'selected' : ''}>Thanh toán thất bại</option>
+                    <option value="REFUNDED" ${this.order.paymentStatus === 'REFUNDED' ? 'selected' : ''}>Đã hoàn tiền</option>
                 </select>
             </div>
             
@@ -257,6 +258,7 @@ class AdminOrderDetailManager {
         </form>
     `;
     }
+
     async saveOrderChanges() {
         try {
             const token = $("meta[name='_csrf']").attr("content");
@@ -329,21 +331,60 @@ class AdminOrderDetailManager {
     }
 
     getStatusBadgeClass(status) {
-        switch (status) {
-            case 'DELIVERED': return 'bg-success';
-            case 'PROCESSING': return 'bg-warning';
-            case 'PENDING': return 'bg-info';
-            case 'CANCELLED': return 'bg-danger';
-            default: return 'bg-secondary';
+        const statusUpper = (status || '').toUpperCase();
+        switch (statusUpper) {
+            case 'DELIVERED':
+            case 'ĐÃ GIAO HÀNG':
+                return 'bg-success';
+            case 'PROCESSING':
+            case 'PENDING':
+            case 'ĐANG XỬ LÝ':
+                return 'bg-warning';
+            case 'SHIPPED':
+            case 'ĐANG GIAO HÀNG':
+                return 'bg-info';
+            case 'CANCELLED':
+            case 'ĐÃ HỦY':
+                return 'bg-danger';
+            default:
+                return 'bg-secondary';
         }
     }
 
+    getStatusText(status) {
+        const statusUpper = (status || '').toUpperCase();
+        const statusMap = {
+            'DELIVERED': 'Đã giao hàng',
+            'PROCESSING': 'Đang xử lý',
+            'PENDING': 'Chờ xử lý',
+            'SHIPPED': 'Đang giao hàng',
+            'CANCELLED': 'Đã hủy',
+            'PAID': 'Đã thanh toán',
+            'UNPAID': 'Chưa thanh toán'
+        };
+        return statusMap[statusUpper] || status || 'Đang xử lý';
+    }
+
     getPaymentStatusBadgeClass(paymentStatus) {
-        switch (paymentStatus) {
+        const statusUpper = (paymentStatus || '').toUpperCase();
+        switch (statusUpper) {
             case 'PAID': return 'bg-success';
             case 'FAILED': return 'bg-danger';
+            case 'REFUNDED': return 'bg-info';
             default: return 'bg-warning';
         }
+    }
+
+    getPaymentStatusText(paymentStatus) {
+        const statusUpper = (paymentStatus || '').toUpperCase();
+        const statusMap = {
+            'PAID': 'Đã thanh toán',
+            'UNPAID': 'Chưa thanh toán',
+            'PENDING': 'Đang chờ thanh toán',
+            'FAILED': 'Thanh toán thất bại',
+            'REFUNDED': 'Đã hoàn tiền'
+        };
+        return statusMap[statusUpper] || paymentStatus || 'Chưa thanh toán';
     }
 
     formatDateTime(dateString) {

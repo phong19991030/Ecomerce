@@ -36,4 +36,6 @@ public interface OrderService {
     Page<OrderDTO> searchOrders(String search, String status, String paymentStatus, Pageable pageable);
 
     Page<OrderDTO> filterOrders(String status, String paymentStatus, Pageable pageable);
+
+    void deductProductQuantities(Long id);
 }

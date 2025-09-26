@@ -121,10 +121,14 @@ class AdminOrdersManager {
             <span class="fw-bold text-primary">${this.formatCurrency(order.totalAmount)} VND</span>
         </td>
         <td>
-            <span class="badge ${this.getStatusBadgeClass(order.status)}">${order.status}</span>
+            <span class="badge ${this.getStatusBadgeClass(order.status)}">${this.getStatusText(order.status)}</span>
         </td>
         <td>
-            <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${order.paymentStatus}</span>
+            <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}" 
+                  data-bs-toggle="tooltip" 
+                  title="${this.getPaymentStatusFullText(order.paymentStatus)}">
+                ${this.getPaymentStatusShortText(order.paymentStatus)}
+            </span>
         </td>
         <td>${this.formatDate(order.orderDate)}</td>
         <td>
@@ -183,40 +187,76 @@ class AdminOrdersManager {
         pagination.appendChild(nextLi);
     }
 
-    applyFilters() {
-        this.filters = {
-            status: $('#statusFilter').val(),
-            paymentStatus: $('#paymentStatusFilter').val(),
-            search: $('#searchInput').val()
-        };
-        this.loadOrders(0);
-    }
-
     refreshOrders() {
         this.loadOrders(this.currentPage);
     }
 
-    viewOrder(orderNumber) {
-        window.location.href = `/admin/orders/${orderNumber}`;
-    }
-
     getStatusBadgeClass(status) {
-        switch (status) {
+        const statusUpper = (status || '').toUpperCase();
+        switch (statusUpper) {
             case 'DELIVERED':
+            case 'ĐÃ GIAO HÀNG':
                 return 'bg-success';
             case 'PROCESSING':
-                return 'bg-warning';
             case 'PENDING':
+            case 'ĐANG XỬ LÝ':
+                return 'bg-warning';
+            case 'SHIPPED':
+            case 'ĐANG GIAO HÀNG':
                 return 'bg-info';
             case 'CANCELLED':
+            case 'ĐÃ HỦY':
                 return 'bg-danger';
             default:
                 return 'bg-secondary';
         }
     }
 
+    getStatusText(status) {
+        const statusUpper = (status || '').toUpperCase();
+        const statusMap = {
+            'DELIVERED': 'Đã giao hàng',
+            'PROCESSING': 'Đang xử lý',
+            'PENDING': 'Chờ xử lý',
+            'SHIPPED': 'Đang giao hàng',
+            'CANCELLED': 'Đã hủy',
+            'PAID': 'Đã thanh toán',
+            'UNPAID': 'Chưa thanh toán'
+        };
+        return statusMap[statusUpper] || status || 'Đang xử lý';
+    }
+
     getPaymentStatusBadgeClass(paymentStatus) {
-        return paymentStatus === 'PAID' ? 'bg-success' : 'bg-warning';
+        const statusUpper = (paymentStatus || '').toUpperCase();
+        return statusUpper === 'PAID' ? 'bg-success' : 'bg-warning';
+    }
+
+    getPaymentStatusText(paymentStatus) {
+        const statusUpper = (paymentStatus || '').toUpperCase();
+        const statusMap = {
+            'PAID': 'Đã thanh toán',
+            'UNPAID': 'Chưa thanh toán',
+            'PENDING': 'Đang chờ thanh toán',
+            'FAILED': 'Thanh toán thất bại',
+            'REFUNDED': 'Đã hoàn tiền'
+        };
+        return statusMap[statusUpper] || paymentStatus || 'Chưa thanh toán';
+    }
+
+    getPaymentStatusShortText(paymentStatus) {
+        const statusUpper = (paymentStatus || '').toUpperCase();
+        const statusMap = {
+            'PAID': 'Đã TT',
+            'UNPAID': 'Chưa TT',
+            'PENDING': 'Chờ TT',
+            'FAILED': 'Lỗi TT',
+            'REFUNDED': 'Hoàn tiền'
+        };
+        return statusMap[statusUpper] || paymentStatus || 'Chưa TT';
+    }
+
+    getPaymentStatusFullText(paymentStatus) {
+        return this.getPaymentStatusText(paymentStatus);
     }
 
     formatDate(dateString) {
@@ -257,6 +297,9 @@ class AdminOrdersManager {
         $('#errorMessage').addClass('d-none');
         $('#emptyOrders').addClass('d-none');
         $('#ordersTable').removeClass('d-none');
+
+        // Khởi tạo tooltip sau khi hiển thị bảng
+        $('[data-bs-toggle="tooltip"]').tooltip();
     }
 }
 

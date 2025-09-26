@@ -81,6 +81,10 @@ public class OrderAdminApiController {
 
             OrderDTO order = orderService.getOrderByNumber(orderNumber);
 
+            // Lưu trạng thái cũ để so sánh
+            String oldStatus = order.getStatus();
+            String oldPaymentStatus = order.getPaymentStatus();
+
             OrderDTO updatedOrder = order;
 
             // Cập nhật trạng thái đơn hàng nếu có
@@ -95,6 +99,15 @@ public class OrderAdminApiController {
 
             if (notes != null) {
                 updatedOrder = orderService.updateOrderNotes(order.getId(), notes);
+            }
+
+            // Kiểm tra nếu trạng thái mới là PAID và DELIVERED
+            String newStatus = (status != null) ? status : oldStatus;
+            String newPaymentStatus = (paymentStatus != null) ? paymentStatus : oldPaymentStatus;
+
+            if ("PAID".equalsIgnoreCase(newPaymentStatus) && "DELIVERED".equalsIgnoreCase(newStatus)) {
+                // Gọi service để trừ số lượng sản phẩm
+                orderService.deductProductQuantities(order.getId());
             }
 
             return ResponseEntity.ok(updatedOrder);

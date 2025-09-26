@@ -259,7 +259,7 @@ class ProductManager {
 
         for (let i = startPage; i <= endPage; i++) {
             html += `
-                <li class="page-item ${i === data.number ? 'active' : ''}">
+                <li class="page-item ${i === data.number ? 'activesss' : ''}">
                     <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
                 </li>
             `;
@@ -320,13 +320,13 @@ class ProductManager {
                 </td>
                 <td>
                     <span class="${product.stock > 10 ? 'text-success' : 'text-danger'}">
-                        ${product.stock || 0} in stock
+                        ${product.stock || 0} sản phẩm
                     </span>
                 </td>
                 <td>${product.category?.name || 'No category'}</td>
                 <td>
                     <span class="badge ${product.active ? 'bg-success' : 'bg-secondary'}">
-                        ${product.active ? 'Active' : 'Inactive'}
+                        ${product.active ? 'Đang hoạt động ' : 'Ngừng hoạt động '}
                     </span>
                 </td>
                 <td>

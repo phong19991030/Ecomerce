@@ -2,15 +2,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chi tiết đơn hàng - Admin</title>
-  <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="/css/custom.css">
-  <link rel="stylesheet" href="/css/admin-order-detail.css">
-  <meta name="_csrf" th:content="${_csrf.token}"/>
-  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng - Admin</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/css/admin-order-detail.css">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 
@@ -34,79 +34,82 @@
 
 <!-- Main Content -->
 <main class="container mt-4">
-  <div class="row">
-    <!-- Sidebar -->
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          <h5><i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển</h5>
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="/dashboard" class="list-group-item list-group-item-action">
+                        <i class="fas fa-chart-line me-2"></i>Dashboard
+                    </a>
+                    <a href="/profile" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user me-2"></i>Hồ sơ
+                    </a>
+                    <a href="/admin/products" class="list-group-item list-group-item-action">
+                        <i class="fas fa-box me-2"></i>Quản lý sản phẩm
+                    </a>
+                    <a href="/admin/orders" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-shopping-bag me-2"></i>Quản lý đơn hàng
+                    </a>
+                    <a href="/admin/users" class="list-group-item list-group-item-action">
+                        <i class="fas fa-users me-2"></i>Quản lý người dùng
+                    </a>
+                    <a href="/admin/reports" class="list-group-item list-group-item-action">
+                        <i class="fas fa-chart-bar me-2"></i>Báo cáo
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="list-group list-group-flush">
-          <a href="/dashboard" class="list-group-item list-group-item-action">
-            <i class="fas fa-chart-line me-2"></i>Dashboard
-          </a>
-          <a href="/admin/products" class="list-group-item list-group-item-action">
-            <i class="fas fa-box me-2"></i>Quản lý sản phẩm
-          </a>
-          <a href="/admin/orders" class="list-group-item list-group-item-action active">
-            <i class="fas fa-shopping-bag me-2"></i>Quản lý đơn hàng
-          </a>
-          <a href="/admin/users" class="list-group-item list-group-item-action">
-            <i class="fas fa-users me-2"></i>User Management
-          </a>
-          <a href="/admin/reports" class="list-group-item list-group-item-action">
-            <i class="fas fa-chart-bar me-2"></i>Báo cáo
-          </a>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <!-- Back Button -->
+            <div class="mb-4">
+                <a href="/admin/orders" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách đơn hàng
+                </a>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Đang tải chi tiết đơn hàng...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <!-- Order Not Found -->
+            <div id="orderNotFound" class="text-center py-5 d-none">
+                <i class="fas fa-exclamation-triangle fa-4x text-warning mb-4"></i>
+                <h3 class="text-warning">Không tìm thấy đơn hàng</h3>
+                <p class="text-muted mb-4">Đơn hàng bạn tìm kiếm không tồn tại</p>
+                <a href="/admin/orders" class="btn btn-primary">
+                    <i class="fas fa-clipboard-list me-2"></i>Quay lại danh sách đơn hàng
+                </a>
+            </div>
+
+            <!-- Order Details -->
+            <div id="orderDetails" class="card d-none">
+                <!-- Content will be populated by JavaScript -->
+            </div>
         </div>
-      </div>
     </div>
-
-    <!-- Main Content -->
-    <div class="col-md-9">
-      <!-- Back Button -->
-      <div class="mb-4">
-        <a href="/admin/orders" class="btn btn-outline-secondary">
-          <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách đơn hàng
-        </a>
-      </div>
-
-      <!-- Loading Spinner -->
-      <div id="loadingSpinner" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-2">Đang tải chi tiết đơn hàng...</p>
-      </div>
-
-      <!-- Error Message -->
-      <div id="errorMessage" class="alert alert-danger d-none" role="alert">
-        <i class="fas fa-exclamation-triangle me-2"></i>
-        <span id="errorText"></span>
-      </div>
-
-      <!-- Order Not Found -->
-      <div id="orderNotFound" class="text-center py-5 d-none">
-        <i class="fas fa-exclamation-triangle fa-4x text-warning mb-4"></i>
-        <h3 class="text-warning">Không tìm thấy đơn hàng</h3>
-        <p class="text-muted mb-4">Đơn hàng bạn tìm kiếm không tồn tại</p>
-        <a href="/admin/orders" class="btn btn-primary">
-          <i class="fas fa-clipboard-list me-2"></i>Quay lại danh sách đơn hàng
-        </a>
-      </div>
-
-      <!-- Order Details -->
-      <div id="orderDetails" class="card d-none">
-        <!-- Content will be populated by JavaScript -->
-      </div>
-    </div>
-  </div>
 </main>
 
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
-  <div class="container">
-    <p>&copy; 2024 Ecommerce App. Administrator Panel</p>
-  </div>
+    <div class="container">
+        <p>&copy; 2024 Ecommerce App. Administrator Panel</p>
+    </div>
 </footer>
 
 <!-- Toast Container -->
@@ -114,17 +117,17 @@
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editOrderModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Chỉnh sửa đơn hàng</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="editOrderModalBody">
-        <!-- Edit form will be populated by JavaScript -->
-      </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chỉnh sửa đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="editOrderModalBody">
+                <!-- Edit form will be populated by JavaScript -->
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>

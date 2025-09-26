@@ -74,8 +74,8 @@ class OrderDetailManager {
                         <i class="fas fa-receipt me-2"></i>Đơn hàng #${order.orderNumber}
                     </h4>
                     <div>
-                        <span class="badge me-2 ${this.getStatusBadgeClass(order.status)}">${order.status}</span>
-                        <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${order.paymentStatus}</span>
+                        <span class="badge me-2 ${this.getStatusBadgeClass(order.status)}">${this.getStatusText(order.status)}</span>
+                        <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${this.getPaymentStatusText(order.paymentStatus)}</span>
                     </div>
                 </div>
             </div>
@@ -95,9 +95,9 @@ class OrderDetailManager {
                     <div class="col-md-6">
                         <h5><i class="fas fa-credit-card me-2"></i>Thông tin thanh toán</h5>
                         <div class="ms-4">
-                            <p><strong>Phương thức:</strong> ${order.paymentMethod}</p>
+                            <p><strong>Phương thức:</strong> ${this.getPaymentMethodText(order.paymentMethod)}</p>
                             <p><strong>Trạng thái:</strong> 
-                                <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${order.paymentStatus}</span>
+                                <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${this.getPaymentStatusText(order.paymentStatus)}</span>
                             </p>
                             <p><strong>Ngày đặt:</strong> ${this.formatDateTime(order.orderDate)}</p>
                             <p><strong>Cập nhật:</strong> ${this.formatDateTime(order.updatedDate)}</p>
@@ -196,8 +196,41 @@ class OrderDetailManager {
         }
     }
 
+    getStatusText(status) {
+        switch (status) {
+            case 'DELIVERED': return 'Đã giao hàng';
+            case 'PROCESSING': return 'Đang xử lý';
+            case 'PENDING': return 'Chờ xử lý';
+            case 'CANCELLED': return 'Đã hủy';
+            default: return status;
+        }
+    }
+
     getPaymentStatusBadgeClass(paymentStatus) {
-        return paymentStatus === 'PAID' ? 'bg-success' : 'bg-warning';
+        switch (paymentStatus) {
+            case 'PAID': return 'bg-success';
+            case 'PENDING': return 'bg-warning';
+            case 'FAILED': return 'bg-danger';
+            default: return 'bg-secondary';
+        }
+    }
+
+    getPaymentStatusText(paymentStatus) {
+        switch (paymentStatus) {
+            case 'PAID': return 'Đã thanh toán';
+            case 'PENDING': return 'Chờ thanh toán';
+            case 'FAILED': return 'Thanh toán thất bại';
+            default: return paymentStatus;
+        }
+    }
+
+    getPaymentMethodText(paymentMethod) {
+        switch (paymentMethod) {
+            case 'COD': return 'Thanh toán khi nhận hàng';
+            case 'BANK_TRANSFER': return 'Chuyển khoản ngân hàng';
+            case 'CREDIT_CARD': return 'Thẻ tín dụng';
+            default: return paymentMethod;
+        }
     }
 
     formatDateTime(dateString) {

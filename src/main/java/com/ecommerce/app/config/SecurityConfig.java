@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login", "/logout", "/error", "/css/**", "/js/**",
+                        .requestMatchers("/login", "/logout", "/register", "/error", "/css/**", "/js/**",
                                 "/webjars/**", "/images/**", "/debug/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/error", "/error/**").permitAll()
@@ -40,9 +40,9 @@ public class SecurityConfig {
                         .requestMatchers("/admin/api/products/**").hasAuthority("ADMIN") // ADMIN API first
                         .requestMatchers("/admin/**").hasAuthority("ADMIN") // Admin pages
                         .requestMatchers("/api/products/**").permitAll()
-                        .requestMatchers("/api/cart/**","api/profile/**","api/addresses/**").authenticated()
+                        .requestMatchers("/api/cart/**", "api/profile/**", "api/addresses/**").authenticated()
                         .requestMatchers("/checkout").authenticated()
-                        .requestMatchers("/api/orders/**","/orders/**").authenticated()
+                        .requestMatchers("/api/orders/**", "/orders/**").authenticated()
                         .anyRequest().access(authorizationManager)
                 )
                 .formLogin(form -> form

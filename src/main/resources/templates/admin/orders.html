@@ -45,11 +45,14 @@
                     <a href="/dashboard" class="list-group-item list-group-item-action">
                         <i class="fas fa-chart-line me-2"></i>Dashboard
                     </a>
+                    <a href="/profile" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user me-2"></i>Hồ sơ
+                    </a>
                     <a href="/admin/products" class="list-group-item list-group-item-action">
                         <i class="fas fa-box me-2"></i>Quản lý sản phẩm
                     </a>
                     <a href="/admin/orders" class="list-group-item list-group-item-action active">
-                        <i class="fas fa-shopping-bag me-2"></i>Quản lý đơn  hàng
+                        <i class="fas fa-shopping-bag me-2"></i>Quản lý đơn hàng
                     </a>
                     <a href="/admin/users" class="list-group-item list-group-item-action">
                         <i class="fas fa-users me-2"></i>Quản lý người dùng
@@ -78,21 +81,21 @@
                     <div class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label">Trạng thái</label>
-                            <select class="form-select" id="statusFilter">
+                            <select class="form-control form-select" id="statusFilter">
                                 <option value="">Tất cả</option>
-                                <option value="PENDING">PENDING</option>
-                                <option value="PROCESSING">PROCESSING</option>
-                                <option value="DELIVERED">DELIVERED</option>
-                                <option value="CANCELLED">CANCELLED</option>
+                                <option value="PENDING">Chờ xử lý</option>
+                                <option value="PROCESSING">Đang xử lý</option>
+                                <option value="DELIVERED">Đã giao hàng</option>
+                                <option value="CANCELLED">Đã hủy</option>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Thanh toán</label>
-                            <select class="form-select" id="paymentStatusFilter">
+                            <select class="form-control form-select" id="paymentStatusFilter">
                                 <option value="">Tất cả</option>
-                                <option value="PENDING">PENDING</option>
-                                <option value="PAID">PAID</option>
-                                <option value="FAILED">FAILED</option>
+                                <option value="PENDING">Đang chờ thanh toán</option>
+                                <option value="PAID">Đã thanh toán</option>
+                                <option value="FAILED">Thanh toán thất bại</option>
                             </select>
                         </div>
                         <div class="col-md-4">

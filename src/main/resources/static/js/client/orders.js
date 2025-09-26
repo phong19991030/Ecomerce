@@ -79,10 +79,10 @@ class OrdersManager {
                 <span class="fw-bold text-primary">${this.formatCurrency(order.totalAmount)} VND</span>
             </td>
             <td>
-                <span class="badge ${this.getStatusBadgeClass(order.status)}">${order.status}</span>
+                <span class="badge ${this.getStatusBadgeClass(order.status)}">${this.getStatusText(order.status)}</span>
             </td>
             <td>
-                <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${order.paymentStatus}</span>
+                <span class="badge ${this.getPaymentStatusBadgeClass(order.paymentStatus)}">${this.getPaymentStatusText(order.paymentStatus)}</span>
             </td>
             <td>
                 <a href="/orders/${order.orderNumber}" class="btn btn-sm btn-outline-primary">
@@ -104,8 +104,32 @@ class OrdersManager {
         }
     }
 
+    getStatusText(status) {
+        switch (status) {
+            case 'DELIVERED': return 'Đã giao hàng';
+            case 'PROCESSING': return 'Đang xử lý';
+            case 'PENDING': return 'Chờ xử lý';
+            case 'CANCELLED': return 'Đã hủy';
+            default: return status;
+        }
+    }
+
     getPaymentStatusBadgeClass(paymentStatus) {
-        return paymentStatus === 'PAID' ? 'bg-success' : 'bg-warning';
+        switch (paymentStatus) {
+            case 'PAID': return 'bg-success';
+            case 'PENDING': return 'bg-warning';
+            case 'FAILED': return 'bg-danger';
+            default: return 'bg-secondary';
+        }
+    }
+
+    getPaymentStatusText(paymentStatus) {
+        switch (paymentStatus) {
+            case 'PAID': return 'Đã thanh toán';
+            case 'PENDING': return 'Chờ thanh toán';
+            case 'FAILED': return 'Thanh toán thất bại';
+            default: return paymentStatus;
+        }
     }
 
     formatDate(dateString) {
