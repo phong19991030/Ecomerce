@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl implements ReportService {
 
     private final OrderRepository orderRepository;
-    // Dựa trên Order.java, giả định status hoàn thành là "DELIVERED"
     private final String COMPLETED_STATUS = "DELIVERED";
 
     @Override
