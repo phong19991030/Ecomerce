@@ -33,6 +33,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/login", "/logout", "/register", "/error", "/css/**", "/js/**",
+                                "/verify-otp", "/resend-otp",
                                 "/webjars/**", "/images/**", "/debug/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/error", "/error/**").permitAll()
