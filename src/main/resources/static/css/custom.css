@@ -337,6 +337,30 @@ body {
     height: 3rem;
 }
 
+
+/* Trong /css/custom.css */
+.nav-link-form {
+    display: inline;
+}
+
+.nav-link-form button.nav-link {
+    color: rgba(255, 255, 255, 0.75) !important;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.nav-link-form button.nav-link:hover {
+    color: rgba(255, 255, 255, 0.9) !important;
+    background: none !important;
+}
+
+/* Đảm bảo form không phá vỡ layout navbar */
+.navbar-nav .nav-link-form {
+    display: inline-block;
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .container {

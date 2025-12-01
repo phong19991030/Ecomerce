@@ -11,10 +11,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -32,18 +35,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login", "/logout", "/register", "/error", "/css/**", "/js/**",
+                        .requestMatchers("/", "/login", "/logout", "/register", "/error", "/css/**", "/js/**",
                                 "/verify-otp", "/resend-otp",
                                 "/webjars/**", "/images/**", "/debug/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/error", "/error/**").permitAll()
                         .requestMatchers("/api/auth/status").permitAll()
-                        .requestMatchers("/admin/api/products/**").hasAuthority("ADMIN") // ADMIN API first
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // Admin pages
+                        .requestMatchers("/admin/api/products/**").hasAuthority("ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/products/**").permitAll()
-                        .requestMatchers("/api/cart/**", "api/profile/**", "api/addresses/**").authenticated()
+                        .requestMatchers("/api/cart/**", "/api/profile/**", "/api/addresses/**").authenticated()
                         .requestMatchers("/checkout").authenticated()
                         .requestMatchers("/api/orders/**", "/orders/**").authenticated()
+                        .requestMatchers("/dashboard").authenticated()
                         .anyRequest().access(authorizationManager)
                 )
                 .formLogin(form -> form
@@ -58,13 +62,16 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout=true")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
+                        .clearAuthentication(true)
+                        .addLogoutHandler(logoutHandler())
                         .permitAll()
                 )
-                // THÊM CẤU HÌNH SESSION MANAGEMENT
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                        .expiredUrl("/login?expired=true")
                 )
-                // THÊM CẤU HÌNH COOKIE
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/public/**", "/api/cart/**", "/admin/api/products/**")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -72,6 +79,11 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()));
 
         return http.build();
+    }
+
+    @Bean
+    public LogoutHandler logoutHandler() {
+        return new SecurityContextLogoutHandler();
     }
 
     @Bean

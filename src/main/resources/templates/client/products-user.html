@@ -32,7 +32,12 @@
             </a>
             <a class="nav-link active" href="/orders"><i class="fas fa-clipboard-list me-1"></i> Đơn hàng</a>
             <!--            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Danh sách yêu thích</a>-->
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
+            <form th:action="@{/logout}" method="post" class="nav-link">
+                <button type="submit" class="btn btn-link nav-link p-0 border-0 text-light"
+                        style="background: none; font-weight: normal;">
+                    <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
+                </button>
+            </form>
         </div>
     </div>
 </nav>
@@ -263,7 +268,7 @@
         </div>
         <hr>
         <div class="text-center">
-            <p>&copy; 2024 Ecommerce Store. All rights reserved.</p>
+            <p>&copy; 2025 Ecommerce Store. All rights reserved.</p>
         </div>
     </div>
 </footer>

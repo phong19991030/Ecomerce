@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
+-- Host:                         localhost
 -- Server version:               10.6.5-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             11.3.0.6295
@@ -33,15 +33,14 @@ CREATE TABLE IF NOT EXISTS `addresses` (
   PRIMARY KEY (`id`),
   KEY `FK1fa36y2oqhao3wgg2rw1pi459` (`user_id`),
   CONSTRAINT `FK1fa36y2oqhao3wgg2rw1pi459` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.addresses: ~4 rows (approximately)
+-- Dumping data for table ecommerce_db.addresses: ~3 rows (approximately)
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
 INSERT IGNORE INTO `addresses` (`id`, `address_type`, `city`, `country`, `full_name`, `is_default`, `phone`, `state`, `street`, `zip_code`, `user_id`) VALUES
 	(2, 'HOME', ' Hà Nội', 'Việt Nam', 'Nguyễn Chung Phong', b'1', '0354412060', '69', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', '2000', 4),
 	(3, 'WORK', 'Hà Nội', 'Việt Nam', 'Nguyễn Chung Phong', b'0', '0354412060', '69', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', '2000', 4),
-	(4, 'OTHER', 'Hà Nội', 'Việt Nam', 'Nguyễn Chung Phong', b'0', '0354412060', '69', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', '2000', 4),
-	(5, 'WORK', 'Hà Nội', 'Việt Nam', 'Nguyễn Chung Phong', b'0', '0354412060', 'Hà Nội', '115 Trần Duy Hưng', '2000', 4);
+	(4, 'OTHER', 'Hà Nội', 'Việt Nam', 'Nguyễn Chung Phong', b'0', '0354412060', '69', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', '2000', 4);
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.carts
@@ -55,11 +54,11 @@ CREATE TABLE IF NOT EXISTS `carts` (
   CONSTRAINT `FKb5o626f86h46m4s7ms6ginnop` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.carts: ~2 rows (approximately)
+-- Dumping data for table ecommerce_db.carts: ~0 rows (approximately)
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
 INSERT IGNORE INTO `carts` (`id`, `user_id`, `created_date`, `updated_date`) VALUES
 	(1, 4, '2025-09-20 08:56:09.000000', '2025-09-20 08:56:09.000000'),
-	(2, 9, '2025-09-23 08:01:58.000000', '2025-09-23 08:01:58.000000');
+	(2, 10, '2025-12-01 08:17:38.000000', '2025-12-01 08:17:38.000000');
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.cart_items
@@ -74,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `cart_items` (
   KEY `FK1re40cjegsfvw58xrkdp6bac6` (`product_id`),
   CONSTRAINT `FK1re40cjegsfvw58xrkdp6bac6` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
   CONSTRAINT `FKpcttvuq4mxppo8sxggjtn5i2c` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table ecommerce_db.cart_items: ~0 rows (approximately)
 /*!40000 ALTER TABLE `cart_items` DISABLE KEYS */;
@@ -116,9 +115,9 @@ CREATE TABLE IF NOT EXISTS `orders` (
   UNIQUE KEY `UKnthkiu7pgmnqnu86i2jyoe2v7` (`order_number`),
   KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
   CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.orders: ~14 rows (approximately)
+-- Dumping data for table ecommerce_db.orders: ~10 rows (approximately)
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
 INSERT IGNORE INTO `orders` (`id`, `customer_email`, `customer_name`, `customer_phone`, `order_date`, `order_number`, `payment_method`, `payment_status`, `shipping_address`, `status`, `total_amount`, `updated_date`, `user_id`, `notes`) VALUES
 	(1, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-20 10:43:24.000000', 'ORD-1758365004806-542', 'COD', 'PAID', 'Thanh Trì', 'DELIVERED', 140000.00, '2025-09-20 14:38:42.000000', 4, 'Đang giao hàng đến >>\n'),
@@ -131,10 +130,8 @@ INSERT IGNORE INTO `orders` (`id`, `customer_email`, `customer_name`, `customer_
 	(8, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 07:11:46.000000', 'ORD-1758438706966-933', 'COD', 'PENDING', '123123', 'PENDING', 85000.00, '2025-09-21 07:11:46.000000', 4, NULL),
 	(9, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-21 09:10:39.000000', 'ORD-1758445839468-529', 'COD', 'PENDING', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', 'PENDING', 25000.00, '2025-09-21 09:10:39.000000', 4, NULL),
 	(10, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-22 16:01:44.000000', 'ORD-1758556904934-186', 'COD', 'PENDING', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', 'PENDING', 105000.00, '2025-09-22 16:01:44.000000', 4, NULL),
-	(11, '123@gmail.com', 'cccccccccccc', '123123', '2025-09-23 07:45:45.000000', 'ORD-1758613545350-436', 'COD', 'PENDING', '123123', 'PENDING', 170000.00, '2025-09-23 07:45:45.000000', 4, NULL),
-	(12, '123@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-23 08:17:44.000000', 'ORD-1758615464432-979', 'COD', 'PENDING', '115 Trần Duy Hưng', 'PENDING', 85000.00, '2025-09-23 08:17:44.000000', 9, NULL),
-	(13, '123@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-23 08:31:47.000000', 'ORD-1758616307171-360', 'COD', 'PENDING', '115 Trần Duy Hưng', 'PENDING', 170000.00, '2025-09-23 08:31:47.000000', 9, NULL),
-	(14, 'phongnguyen1999.10.30@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-09-23 16:24:43.000000', 'ORD-1758644683238-733', 'COD', 'PAID', 'Ngõ 48A Thượng Phúc , Tả Thanh Oai , Thanh Trì , Hà Nội', 'DELIVERED', 115000.00, '2025-09-23 16:25:16.000000', 4, '');
+	(11, 'user@email.com', 'Nguyễn Chung Phong', '0354412060', '2025-12-01 08:17:53.000000', 'ORD-1764577073611-108', 'COD', 'PAID', '115 Trần Duy Hưng', 'DELIVERED', 90000.00, '2025-12-01 08:18:48.000000', 10, '123'),
+	(12, '123@gmail.com', 'Nguyễn Chung Phong', '0354412060', '2025-12-01 09:12:17.000000', 'ORD-1764580337424-481', 'COD', 'PAID', '115 Trần Duy Hưng', 'DELIVERED', 90000.00, '2025-12-01 09:12:57.000000', 10, '123');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.order_items
@@ -150,9 +147,9 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   KEY `FKocimc7dtr037rh4ls4l95nlfi` (`product_id`),
   CONSTRAINT `FKbioxgbv59vetrxe0ejfubep1w` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `FKocimc7dtr037rh4ls4l95nlfi` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.order_items: ~32 rows (approximately)
+-- Dumping data for table ecommerce_db.order_items: ~20 rows (approximately)
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
 INSERT IGNORE INTO `order_items` (`id`, `quantity`, `subtotal`, `unit_price`, `order_id`, `product_id`) VALUES
 	(1, 2, 50000.00, 25000.00, 1, 6),
@@ -175,18 +172,12 @@ INSERT IGNORE INTO `order_items` (`id`, `quantity`, `subtotal`, `unit_price`, `o
 	(18, 1, 25000.00, 25000.00, 9, 6),
 	(19, 1, 30000.00, 30000.00, 10, 13),
 	(20, 3, 75000.00, 25000.00, 10, 6),
-	(21, 2, 50000.00, 25000.00, 11, 6),
-	(22, 2, 60000.00, 30000.00, 11, 7),
-	(23, 2, 60000.00, 30000.00, 11, 8),
-	(24, 1, 25000.00, 25000.00, 12, 6),
-	(25, 1, 30000.00, 30000.00, 12, 7),
-	(26, 1, 30000.00, 30000.00, 12, 8),
-	(27, 2, 50000.00, 25000.00, 13, 6),
-	(28, 2, 60000.00, 30000.00, 13, 7),
-	(29, 2, 60000.00, 30000.00, 13, 8),
-	(30, 1, 25000.00, 25000.00, 14, 6),
-	(31, 2, 60000.00, 30000.00, 14, 7),
-	(32, 1, 30000.00, 30000.00, 14, 8);
+	(21, 1, 30000.00, 30000.00, 11, 7),
+	(22, 1, 30000.00, 30000.00, 11, 8),
+	(23, 1, 30000.00, 30000.00, 11, 9),
+	(24, 1, 30000.00, 30000.00, 12, 10),
+	(25, 1, 30000.00, 30000.00, 12, 11),
+	(26, 1, 30000.00, 30000.00, 12, 12);
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.products
@@ -219,12 +210,12 @@ CREATE TABLE IF NOT EXISTS `products` (
 INSERT IGNORE INTO `products` (`id`, `description`, `image_url`, `name`, `price`, `stock`, `category_id`, `active`, `brand`, `color`, `created_at`, `dimensions`, `material`, `rating`, `review_count`, `sku`, `updated_at`, `weight`) VALUES
 	(5, 'Bánh nướng thập cẩm đẳng cấp thế giới ,Bánh nướng thập cẩm đẳng cấp thế giới ', '/images/3c3d64f0-a3e5-4544-b403-4acaefa01190.jpg', 'Bánh nướng thập cẩm ', 25000.00, 1, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Red', '2025-09-19 08:31:20.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-19 09:27:54.000000', NULL),
 	(6, 'Bánh nướng đậu xanhBánh nướng đậu xanhBánh nướng đậu xanh', '/images/f4666022-c7be-4b6f-81c3-6f529aa34528.jpg', 'Bánh nướng đậu xanh', 25000.00, 30, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Green', '2025-09-19 09:21:08.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-20 10:02:18.000000', NULL),
-	(7, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 30, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-20 10:02:22.000000', NULL),
-	(8, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 30, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-20 10:02:27.000000', NULL),
-	(9, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 1, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-19 09:32:32.000000', NULL),
-	(10, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 1, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-19 09:32:32.000000', NULL),
-	(11, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 1, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-19 09:32:32.000000', NULL),
-	(12, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 1, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-19 09:32:32.000000', NULL),
+	(7, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 29, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-12-01 08:18:48.000000', NULL),
+	(8, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 29, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-12-01 08:18:48.000000', NULL),
+	(9, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 0, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-12-01 08:18:48.000000', NULL),
+	(10, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 0, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-12-01 09:12:58.000000', NULL),
+	(11, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 0, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-12-01 09:12:58.000000', NULL),
+	(12, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 0, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-12-01 09:12:58.000000', NULL),
 	(13, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 1, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-19 09:32:32.000000', NULL),
 	(15, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 1, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-19 09:32:32.000000', NULL),
 	(16, 'Bánh nướng khoái môn ,Bánh nướng khoái mônBánh nướng khoái mônBánh nướng khoái môn', '/images/8058fb71-56df-4bdd-9502-68a6b2e34453.jpg', 'Bánh nướng khoái môn', 30000.00, 1, 1, b'1', 'Bánh Kẹo Sinh Sửu', 'Perple', '2025-09-19 09:32:32.000000', NULL, NULL, NULL, NULL, 'SKU', '2025-09-19 09:32:32.000000', NULL),
@@ -361,15 +352,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`),
   UNIQUE KEY `UKr43af9ap4edm43mmtq01oddj6` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.users: ~4 rows (approximately)
+-- Dumping data for table ecommerce_db.users: ~3 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT IGNORE INTO `users` (`id`, `email`, `enabled`, `full_name`, `password`, `role`, `username`) VALUES
-	(3, 'admin@email.com', b'1', 'Administrator', '$2a$10$kN14YPnGXQlgR1oIYhOhlO1/RlvYbfnN2j2D/E76.mIleKVhsweyS', NULL, 'admin'),
-	(4, 'user@email.com', b'1', 'Client User', '$2a$10$DCmlHJv1p8q.XVaFVjruYuLnJ8v21w6rLe8bnvPdNDtQ8NJMeYR2.', NULL, 'user'),
+	(3, 'admin@email.com', b'1', 'Administrator', '$2a$10$/vPabnBs4Pe.3pjrZjEc1.09JEe2R87SImzFF3tp708aZoIEsWWB.', NULL, 'admin'),
+	(4, 'user@email.com', b'1', 'Client User', '$2a$10$/vPabnBs4Pe.3pjrZjEc1.09JEe2R87SImzFF3tp708aZoIEsWWB.', NULL, 'user'),
 	(8, 'phongnguyen1999.10.30@gmail.com', b'1', 'Nguyễn Chung Phong', '$2a$10$/vPabnBs4Pe.3pjrZjEc1.09JEe2R87SImzFF3tp708aZoIEsWWB.', NULL, 'phongnc'),
-	(9, 'phongnguyen19099.10.30@gmail.com', b'1', 'Trần Đăng Khoa', '$2a$10$S0pjq.oMpzvxGiW2ld82E.uqr7xkDzWSK5eFPmJv1Hug2FFYoDvQK', NULL, 'khoatd');
+	(10, 'phongnguyen1999.10.30.2@gmail.com', b'1', 'Nguyễn Chung Phong', '$2a$10$nTUZVZgnXWQEnDLai.ygSuwZrh3j3UTHgJJBM8NVSn/lSqaSUDH2u', NULL, 'phongnc2');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping structure for table ecommerce_db.user_role
@@ -382,13 +373,13 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKt7e7djp752sqn6w22i6ocqy6q` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table ecommerce_db.user_role: ~4 rows (approximately)
+-- Dumping data for table ecommerce_db.user_role: ~3 rows (approximately)
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
 INSERT IGNORE INTO `user_role` (`user_id`, `role_id`) VALUES
 	(3, 3),
 	(4, 4),
 	(8, 3),
-	(9, 4);
+	(10, 4);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

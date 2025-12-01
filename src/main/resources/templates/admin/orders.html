@@ -27,7 +27,12 @@
             <a class="nav-link" href="/admin/products"><i class="fas fa-box me-1"></i> Sản phẩm</a>
             <a class="nav-link" href="/admin/orders"><i class="fas fa-shopping-bag me-1"></i> Đơn hàng</a>
             <a class="nav-link active" href="/admin/users"><i class="fas fa-users me-1"></i> Người dùng</a>
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
+            <form th:action="@{/logout}" method="post" class="nav-link">
+                <button type="submit" class="btn btn-link nav-link p-0 border-0 text-light"
+                        style="background: none; font-weight: normal;">
+                    <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
+                </button>
+            </form>
         </div>
     </div>
 </nav>
@@ -172,7 +177,7 @@
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
-        <p>&copy; 2024 Ecommerce App. Administrator Panel</p>
+        <p>&copy; 2025 Ecommerce App. Administrator Panel</p>
     </div>
 </footer>
 

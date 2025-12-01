@@ -25,7 +25,12 @@
             <a class="nav-link" href="/client/cart"><i class="fas fa-shopping-cart me-1"></i> Giỏ hàng</a>
             <a class="nav-link active" href="/orders"><i class="fas fa-clipboard-list me-1"></i> Đơn hàng</a>
             <!--            <a class="nav-link" href="/wishlist"><i class="fas fa-heart me-1"></i> Danh sách yêu thích</a>-->
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a>
+            <form th:action="@{/logout}" method="post" class="nav-link">
+                <button type="submit" class="btn btn-link nav-link p-0 border-0 text-light"
+                        style="background: none; font-weight: normal;">
+                    <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
+                </button>
+            </form>
         </div>
     </div>
 </nav>
@@ -189,7 +194,7 @@
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
-        <p>&copy; 2024 Ecommerce App. All rights reserved.</p>
+        <p>&copy; 2025 Ecommerce App. All rights reserved.</p>
     </div>
 </footer>
 

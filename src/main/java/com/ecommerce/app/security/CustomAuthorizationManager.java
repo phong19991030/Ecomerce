@@ -69,9 +69,9 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
             List<com.ecommerce.app.entity.Url> userUrls = urlService.getUrlsByRoleNames(roleNames);
 
             logger.debug("User has access to {} URLs", userUrls.size());
-            userUrls.forEach(url ->
-                    logger.debug("Allowed URL: {} {}", url.getHttpMethod(), url.getPattern())
-            );
+//            userUrls.forEach(url ->
+//                    logger.debug("Allowed URL: {} {}", url.getHttpMethod(), url.getPattern())
+//            );
 
             // Kiểm tra xem user có quyền truy cập URL này không
             String finalRequestUri = requestUri;
