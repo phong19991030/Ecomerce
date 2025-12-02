@@ -1,40 +1,36 @@
-<!-- src/main/resources/templates/profile/addresses.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Địa chỉ của tôi - Ecommerce</title>
+
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
     <link rel="stylesheet" href="/css/custom.css">
+
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <style>
-        .address-card {
+        .profile-card, .address-card {
             transition: transform 0.2s;
-            border: 1px solid #dee2e6;
         }
-        .address-card:hover {
+        .profile-card:hover, .address-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .default-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-        .address-actions {
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .address-card:hover .address-actions {
-            opacity: 1;
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
         }
     </style>
 </head>
 <body>
-<!-- Navigation -->
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="/">
@@ -68,13 +64,13 @@
                     <a href="/dashboard" class="list-group-item list-group-item-action">
                         <i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển
                     </a>
-                    <a href="/profile" class="list-group-item list-group-item-action">
+                    <a href="/profile" class="list-group-item list-group-item-action active">
                         <i class="fas fa-user me-2"></i>Hồ sơ
                     </a>
                     <a href="/orders" class="list-group-item list-group-item-action">
                         <i class="fas fa-shopping-bag me-2"></i>Đơn hàng của tôi
                     </a>
-                    <a href="/addresses" class="list-group-item list-group-item-action active">
+                    <a href="/addresses" class="list-group-item list-group-item-action">
                         <i class="fas fa-address-book me-2"></i>Địa chỉ
                     </a>
                 </div>
@@ -82,101 +78,86 @@
         </div>
 
         <div class="col-md-9">
-            <!-- Addresses Content -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4><i class="fas fa-address-book me-2"></i>Địa chỉ của tôi</h4>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addressModal">
-                    <i class="fas fa-plus me-2"></i>Thêm địa chỉ mới
-                </button>
-            </div>
+            <div class="card shadow-lg">
+                <div class="card-header bg-white border-bottom">
+                    <h2 class="h4 mb-0 text-primary">
+                        <i class="fas fa-map-marker-alt me-2"></i> Sổ Địa Chỉ
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-end mb-4">
+                        <button class="btn btn-primary" id="addAddressBtn">
+                            <i class="fas fa-plus me-2"></i> Thêm Địa chỉ mới
+                        </button>
+                    </div>
 
-            <div id="addressesContainer" class="row">
-                <!-- Address cards will be loaded here via AJAX -->
-            </div>
-
-            <div class="text-center mt-4" id="loadingSpinner">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Đang tải...</span>
+                    <div id="addressesContainer" class="row g-4">
+                        <p class="text-center w-100 text-muted">Đang tải danh sách địa chỉ...</p>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 
-<!-- Add/Edit Address Modal -->
+
 <div class="modal fade" id="addressModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Thêm địa chỉ mới</h5>
+                <h5 class="modal-title" id="addressModalLabel">Thêm Địa chỉ mới</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="addressForm">
-                    <input type="hidden" id="addressId">
-                    <div class="row">
+                    <input type="hidden" id="addressId" name="id">
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                    <input type="hidden" id="country" name="country" value="Việt Nam">
+
+                    <div id="map" style="height: 400px; width: 100%;" class="mb-4 rounded border"></div>
+
+                    <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="fullName" class="form-label">Họ và tên *</label>
-                                <input type="text" class="form-control" id="fullName" required>
-                            </div>
+                            <label for="fullName" class="form-label">Họ và Tên Người nhận <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Số điện thoại *</label>
-                                <input type="tel" class="form-control" id="phone" required>
-                            </div>
+                            <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="street" class="form-label">Địa chỉ đường *</label>
-                        <input type="text" class="form-control" id="street" required>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="city" class="form-label">Thành phố *</label>
-                                <input type="text" class="form-control" id="city" required>
-                            </div>
+                        <div class="col-12">
+                            <label for="street" class="form-label">Địa chỉ chi tiết (Số nhà, Tên đường, Tòa nhà) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="street" name="street" placeholder="Ví dụ: Số 123, đường Nguyễn Huệ" required>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="state" class="form-label">Tỉnh/Thành phố *</label>
-                                <input type="text" class="form-control" id="state" required>
-                            </div>
+                        <div class="col-md-4">
+                            <label for="city" class="form-label">Thành phố/Tỉnh <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="city" name="city" required>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="zipCode" class="form-label">Mã bưu điện *</label>
-                                <input type="text" class="form-control" id="zipCode" required>
-                            </div>
+                        <div class="col-md-4">
+                            <label for="state" class="form-label">Quận/Huyện <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="state" name="state" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="zipCode" class="form-label">Mã bưu chính (Nếu có)</label>
+                            <input type="text" class="form-control" id="zipCode" name="zipCode">
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="country" class="form-label">Quốc gia *</label>
-                                <input type="text" class="form-control" id="country" value="Việt Nam" required>
-                            </div>
+                            <label for="addressType" class="form-label">Loại Địa chỉ</label>
+                            <select id="addressType" name="addressType" class="form-select">
+                                <option value="HOME">Nhà riêng</option>
+                                <option value="WORK">Cơ quan/Công ty</option>
+                                <option value="OTHER">Khác</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="addressType" class="form-label">Loại địa chỉ</label>
-                                <select class="form-select" id="addressType">
-                                    <option value="HOME">Nhà riêng</option>
-                                    <option value="WORK">Cơ quan</option>
-                                    <option value="OTHER">Khác</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="isDefault">
-                                <label class="form-check-label" for="isDefault">Đặt làm địa chỉ mặc định</label>
-                            </div>
-                        </div>
+
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" id="isDefault" name="default">
+                        <label class="form-check-label" for="isDefault">
+                            Đặt làm địa chỉ mặc định
+                        </label>
                     </div>
                 </form>
             </div>
@@ -188,7 +169,20 @@
     </div>
 </div>
 
-<!-- Footer -->
+<div class="modal fade" id="viewMapModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vị trí địa chỉ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="viewMap" style="height: 500px; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
         <p>&copy; 2025 Ecommerce App. Tất cả quyền được bảo lưu.</p>
@@ -197,284 +191,10 @@
 
 <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
 <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script>
-    $(document).ready(function() {
-        const token = $("meta[name='_csrf']").attr("content");
-        const header = $("meta[name='_csrf_header']").attr("content");
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
-        const modal = new bootstrap.Modal(document.getElementById('addressModal'));
-        let editingAddressId = null;
+<script src="/js/addresses.js"></script>
 
-        // Load addresses on page load
-        loadAddresses();
-
-        // Open modal for adding new address
-        $('[data-bs-target="#addressModal"]').click(function() {
-            editingAddressId = null;
-            $('#modalTitle').text('Thêm địa chỉ mới');
-            $('#addressForm')[0].reset();
-            $('#country').val('Việt Nam'); // Set default country
-            $('#addressId').val('');
-            modal.show();
-        });
-
-        // Save address
-        $('#saveAddressBtn').click(async function() {
-            const addressData = {
-                fullName: $('#fullName').val(),
-                phone: $('#phone').val(),
-                street: $('#street').val(),
-                city: $('#city').val(),
-                state: $('#state').val(),
-                zipCode: $('#zipCode').val(),
-                country: $('#country').val(),
-                addressType: $('#addressType').val(),
-                isDefault: $('#isDefault').is(':checked')
-            };
-
-            const addressId = $('#addressId').val();
-            const url = addressId ? `/api/addresses/${addressId}` : '/api/addresses';
-            const method = addressId ? 'PUT' : 'POST';
-
-            try {
-                const response = await fetch(url, {
-                    method: method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        [header]: token
-                    },
-                    body: JSON.stringify(addressData),
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    modal.hide();
-                    showAlert('Đã lưu địa chỉ thành công!', 'success');
-                    loadAddresses();
-                } else {
-                    showAlert('Lỗi khi lưu địa chỉ. Mã lỗi: ' + response.status, 'danger');
-                }
-            } catch (error) {
-                showAlert('Lỗi khi lưu địa chỉ: ' + error.message, 'danger');
-            }
-        });
-
-        // Load addresses function
-        async function loadAddresses() {
-            $('#loadingSpinner').show();
-            $('#addressesContainer').empty();
-
-            try {
-                const response = await fetch('/api/addresses', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        [header]: token
-                    },
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const addresses = await response.json();
-                    displayAddresses(addresses);
-                } else {
-                    showAlert('Lỗi khi tải địa chỉ. Mã lỗi: ' + response.status, 'danger');
-                }
-            } catch (error) {
-                showAlert('Lỗi khi tải địa chỉ: ' + error.message, 'danger');
-            } finally {
-                $('#loadingSpinner').hide();
-            }
-        }
-
-        // Display addresses
-        function displayAddresses(addresses) {
-            if (addresses.length === 0) {
-                $('#addressesContainer').html(`
-                <div class="col-12 text-center py-5">
-                    <i class="fas fa-map-marker-alt fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">Chưa có địa chỉ nào</h5>
-                    <p class="text-muted">Thêm địa chỉ đầu tiên để bắt đầu.</p>
-                </div>
-            `);
-                return;
-            }
-
-            addresses.forEach(address => {
-                const addressCard = createAddressCard(address);
-                $('#addressesContainer').append(addressCard);
-            });
-        }
-
-        // Create address card HTML
-        function createAddressCard(address) {
-            const addressTypeMap = {
-                'HOME': 'Nhà riêng',
-                'WORK': 'Cơ quan',
-                'OTHER': 'Khác'
-            };
-
-            return `
-            <div class="col-md-6 mb-4">
-                <div class="card address-card h-100">
-                    <div class="card-body position-relative">
-                        ${address.isDefault ? `
-                            <span class="badge bg-primary default-badge">
-                                <i class="fas fa-star me-1"></i>Mặc định
-                            </span>
-                        ` : ''}
-
-                        <h6 class="card-title">${address.fullName}</h6>
-                        <p class="card-text mb-1">
-                            <i class="fas fa-phone me-2 text-muted"></i>${address.phone}
-                        </p>
-                        <p class="card-text mb-1">
-                            <i class="fas fa-map-marker-alt me-2 text-muted"></i>
-                            ${address.street}
-                        </p>
-                        <p class="card-text mb-1">
-                            ${address.city}, ${address.state} ${address.zipCode}
-                        </p>
-                        <p class="card-text">
-                            <i class="fas fa-globe me-2 text-muted"></i>${address.country}
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                <i class="fas fa-tag me-1"></i>${addressTypeMap[address.addressType] || address.addressType}
-                            </small>
-                        </p>
-
-                        <div class="address-actions mt-3">
-                            <button class="btn btn-sm btn-outline-primary me-2 edit-address"
-                                    data-id="${address.id}">
-                                <i class="fas fa-edit me-1"></i>Sửa
-                            </button>
-                            ${!address.isDefault ? `
-                                <button class="btn btn-sm btn-outline-success me-2 set-default"
-                                        data-id="${address.id}">
-                                    <i class="fas fa-star me-1"></i>Đặt mặc định
-                                </button>
-                            ` : ''}
-                            <button class="btn btn-sm btn-outline-danger delete-address"
-                                    data-id="${address.id}">
-                                <i class="fas fa-trash me-1"></i>Xóa
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        }
-
-        // Edit address
-        $(document).on('click', '.edit-address', async function() {
-            const addressId = $(this).data('id');
-            editingAddressId = addressId;
-
-            try {
-                const response = await fetch(`/api/addresses/${addressId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        [header]: token
-                    },
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const address = await response.json();
-                    $('#modalTitle').text('Sửa địa chỉ');
-                    $('#addressId').val(address.id);
-                    $('#fullName').val(address.fullName);
-                    $('#phone').val(address.phone);
-                    $('#street').val(address.street);
-                    $('#city').val(address.city);
-                    $('#state').val(address.state);
-                    $('#zipCode').val(address.zipCode);
-                    $('#country').val(address.country);
-                    $('#addressType').val(address.addressType);
-                    $('#isDefault').prop('checked', address.isDefault);
-                    modal.show();
-                } else {
-                    showAlert('Lỗi khi tải thông tin địa chỉ.', 'danger');
-                }
-            } catch (error) {
-                showAlert('Lỗi khi tải thông tin địa chỉ: ' + error.message, 'danger');
-            }
-        });
-
-        // Set default address
-        $(document).on('click', '.set-default', async function() {
-            const addressId = $(this).data('id');
-
-            try {
-                const response = await fetch(`/api/addresses/${addressId}/set-default`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        [header]: token
-                    },
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.success) {
-                        showAlert('Đã đặt địa chỉ mặc định thành công!', 'success');
-                        loadAddresses();
-                    } else {
-                        showAlert(result.message, 'danger');
-                    }
-                } else {
-                    showAlert('Lỗi khi đặt địa chỉ mặc định.', 'danger');
-                }
-            } catch (error) {
-                showAlert('Lỗi khi đặt địa chỉ mặc định: ' + error.message, 'danger');
-            }
-        });
-
-        // Delete address
-        $(document).on('click', '.delete-address', async function() {
-            const addressId = $(this).data('id');
-
-            if (confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
-                try {
-                    const response = await fetch(`/api/addresses/${addressId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            [header]: token
-                        },
-                        credentials: 'include'
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.success) {
-                            showAlert('Đã xóa địa chỉ thành công!', 'success');
-                            loadAddresses();
-                        } else {
-                            showAlert(result.message, 'danger');
-                        }
-                    } else {
-                        showAlert('Lỗi khi xóa địa chỉ.', 'danger');
-                    }
-                } catch (error) {
-                    showAlert('Lỗi khi xóa địa chỉ: ' + error.message, 'danger');
-                }
-            }
-        });
-
-        function showAlert(message, type) {
-            const alert = $('<div class="alert alert-' + type + ' alert-dismissible fade show mt-3">' +
-                message +
-                '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-                '</div>');
-            $('main .container').prepend(alert);
-            setTimeout(() => alert.alert('close'), 5000);
-        }
-    });
-</script>
 </body>
 </html>

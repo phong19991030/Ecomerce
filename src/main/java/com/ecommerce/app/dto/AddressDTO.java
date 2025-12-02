@@ -14,5 +14,7 @@ public class AddressDTO {
     private String zipCode;
     private String country;
     private boolean isDefault;
+    private Double latitude;
+    private Double longitude;
     private String addressType;
 }

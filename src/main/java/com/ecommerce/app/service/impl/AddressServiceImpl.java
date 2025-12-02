@@ -116,11 +116,16 @@ public class AddressServiceImpl implements AddressService {
         dto.setState(address.getState());
         dto.setZipCode(address.getZipCode());
         dto.setCountry(address.getCountry());
+        // THÊM: Cập nhật trường tọa độ mới
+        dto.setLatitude(address.getLatitude());
+        dto.setLongitude(address.getLongitude());
+        // END: Cập nhật trường tọa độ mới
         dto.setDefault(address.isDefault());
         dto.setAddressType(address.getAddressType());
         return dto;
     }
 
+    // Cập nhật phương thức chuyển đổi từ DTO sang Entity
     private Address convertToEntity(AddressDTO dto) {
         Address address = new Address();
         address.setId(dto.getId());
@@ -131,8 +136,13 @@ public class AddressServiceImpl implements AddressService {
         address.setState(dto.getState());
         address.setZipCode(dto.getZipCode());
         address.setCountry(dto.getCountry());
+        // THÊM: Cập nhật trường tọa độ mới
+        address.setLatitude(dto.getLatitude());
+        address.setLongitude(dto.getLongitude());
+        // END: Cập nhật trường tọa độ mới
         address.setDefault(dto.isDefault());
         address.setAddressType(dto.getAddressType());
+        // User sẽ được set trong phương thức createAddress/updateAddress
         return address;
     }
 }

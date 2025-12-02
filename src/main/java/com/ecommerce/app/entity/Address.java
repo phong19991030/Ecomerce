@@ -39,6 +39,9 @@ public class Address {
     @Column(nullable = false)
     private String country;
 
+    private Double latitude;
+    private Double longitude;
+
     private boolean isDefault = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
